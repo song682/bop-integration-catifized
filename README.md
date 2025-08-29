@@ -4,7 +4,7 @@ A Minecraft 1.7.10 mod for making Biomes O' Plenty work better with other mods, 
 These interactions may been fixed in newer versions of Biomes O' Plenty, but not for 1.7.10.    
 Every change can be enabled or disabled in the config file.     
 
-The entry that have a "(*)" symbol means added by dfdvdsf, "(&)" means changed by myself.
+The entry that have a "(*)" symbol means added by dfdvdsf, "(&)" means changed by dfdvdsf.
 
 ## **Changes**
 * General Tweaks
