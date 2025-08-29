@@ -1,4 +1,5 @@
 package com.vladmarica.bopIntegration.tweaks;
+
 import biomesoplenty.api.content.BOPCBlocks;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;
 import cpw.mods.fml.common.IWorldGenerator;
@@ -7,15 +8,45 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import java.util.Random;
+import java.lang.reflect.Field;
 
 public class BOPLegacyWorldGenerator implements IWorldGenerator {
 
     private WorldGenCrystals crystalGenerator = new WorldGenCrystals();
+    private Field providerField = null;
+
+    public BOPLegacyWorldGenerator() {
+        try {
+            // 使用反射获取 World 类的 provider 字段
+            providerField = World.class.getDeclaredField("provider");
+            providerField.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            BOPIntegrationMod.logger.error("Could not find provider field in World class", e);
+        }
+    }
 
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-        if (world.provider.dimensionId == 1) {
-            generateEnd(random, chunkX, chunkZ, world);
+        try {
+            // 使用反射获取世界提供者
+            Object provider = providerField.get(world);
+            // 使用反射获取维度ID字段
+            Field dimensionIdField = provider.getClass().getDeclaredField("dimensionId");
+            dimensionIdField.setAccessible(true);
+            int dimensionId = (Integer) dimensionIdField.get(provider);
+
+            if (dimensionId == 1) {
+                generateEnd(random, chunkX, chunkZ, world);
+            }
+        } catch (Exception e) {
+            // 如果反射失败，尝试使用传统方法
+            try {
+                if (world.provider.dimensionId == 1) {
+                    generateEnd(random, chunkX, chunkZ, world);
+                }
+            } catch (NoSuchFieldError ex) {
+                BOPIntegrationMod.logger.error("Failed to access dimension ID", ex);
+            }
         }
     }
 

@@ -4,7 +4,7 @@ A Minecraft 1.7.10 mod for making Biomes O' Plenty work better with other mods, 
 These interactions may been fixed in newer versions of Biomes O' Plenty, but not for 1.7.10.    
 Every change can be enabled or disabled in the config file.     
 
-The entry that have a "(*)" symbol means added by dfdvdsf.
+The entry that have a "(*)" symbol means added by dfdvdsf, "(&)" means changed by myself.
 
 ## **Changes**
 * General Tweaks
@@ -13,7 +13,7 @@ The entry that have a "(*)" symbol means added by dfdvdsf.
     * Made Celestial Crystals spawn in the End.
     * Removed Enderporter recipe. Can be reenabled in the config.
     * Made the Biome Finder recipe harder by making it require Celestial Crystals and Ghastly Souls.
-    * Added a recipe to craft Rotten Flesh out of Chunks of Flesh and Eyebulbs.
+    * Added a recipe to craft Rotten Flesh out of Chunks of Flesh and Eyebulbs. (Disabled by default.(&))
     * Added an option to lower the spawn rate of nether wasp hives.
     * Remove decrease koru rarity for it is incompatible with modern 1.7.10 mixin environment. (*)
 
