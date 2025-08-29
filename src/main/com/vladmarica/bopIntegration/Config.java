@@ -17,30 +17,33 @@ public class Config {
     public float waspHiveRarityModifier;
     public boolean fixSilverwoodTrees;
     public boolean addMissingAspects;
+    public boolean fixIC2RubberTrees;
 
     public Config(File file) {
         configurationFile = new Configuration(file);
         configurationFile.addCustomCategoryComment("Tweaks", "These options modify BOP itself. Some of these features are unavailable in the 1.7.10 version of BOP but existed in previous or later versions.");
         configurationFile.addCustomCategoryComment("Thaumcraft", "Options to make BOP work better with Thaumcraft");
+        configurationFile.addCustomCategoryComment("IC2", "Options to make BOP work better with IC2");
 
         configurationFile.load();
-        sync();
-        save();
+        BopIntegrateOptions();
+        saveConfigurationFile();
     }
 
-    public void sync() {
+    public void BopIntegrateOptions() {
         genCelestialCrystals = configurationFile.getBoolean("genCelestialCrystals", "Tweaks", true, "Generate Celestial Crystals in the End. Used to make Ambrosia.");
         genBiomeEssence = configurationFile.getBoolean("genBiomeEssence", "Tweaks", true, "Generate Biome Essence Ore in the End. Drops Biome Essence.");
         removeNetherGravestones = configurationFile.getBoolean("removeNetherGravestones", "Tweaks", true, "Prevent gravestones from spawning in the Nether. They are ugly and useless.");
         craftableRottenFlesh = configurationFile.getBoolean("craftableRottenFlesh", "Tweaks", false, "Adds a recipe to craft rotten flesh out of flesh chunks and an eyebulb.");
         removeEnderporterRecipe = configurationFile.getBoolean("removeEnderporterRecipe", "Tweaks", true, "It can still be cheating in by an op.");
-        harderBiomeFinderRecipe = configurationFile.getBoolean("harderBiomeFinderRecipe", "Tweaks", true, "Makes the recipe use end crystals and ghastly souls.");
+        harderBiomeFinderRecipe = configurationFile.getBoolean("harderBiomeFinderRecipe", "Tweaks", false, "Makes the recipe use end crystals and ghastly souls.");
         waspHiveRarityModifier = configurationFile.getFloat("waspHiveRarityModifier", "Tweaks", 1.0F, 0.0F, 1.0F, "You can use this option to make nether wasp hives rarer.");
-        fixSilverwoodTrees = configurationFile.getBoolean("fixSilverwoodTrees", "Thaumcraft", true, "Allows Silverwood trees to spawn in all forest and plains biomes.");
+        fixSilverwoodTrees = configurationFile.getBoolean("fixSilverwoodTrees", "Thaumcraft", false, "Allows Silverwood trees to spawn in all forest and plains biomes.");
         addMissingAspects = configurationFile.getBoolean("addMissingAspects", "Thaumcraft", true, "Many BOP items don't give any aspects. ");
+        fixIC2RubberTrees = configurationFile.getBoolean("fixRubberTrees", "IC2", false, "Fix rubber trees incorrecting spawning in grassland and marsh biomes.");
     }
 
-    public void save() {
+    public void saveConfigurationFile() {
         configurationFile.save();
     }
 
