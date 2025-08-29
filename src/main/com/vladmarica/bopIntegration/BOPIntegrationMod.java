@@ -9,7 +9,6 @@ import biomesoplenty.common.biome.decoration.BOPOverworldBiomeDecorator;
 import biomesoplenty.common.biome.decoration.OverworldBiomeFeatures;
 import biomesoplenty.common.blocks.BlockBOPFoliage;
 import biomesoplenty.common.world.generation.WorldGenFieldAssociation;
-import biomesoplenty.api.biome.BiomeFeatures;
 import com.vladmarica.bopIntegration.tweaks.BOPLegacyWorldGenerator;
 import com.vladmarica.bopIntegration.tweaks.WorldGenNothing;
 import com.vladmarica.bopIntegration.thaumcraft.ThaumcraftModCompat;
@@ -36,11 +35,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
 
 @Mod(modid = BOPIntegrationMod.MODID, version = "1.1 - Kittified", dependencies = "required-after:BiomesOPlenty")
 public class BOPIntegrationMod {
@@ -58,7 +54,7 @@ public class BOPIntegrationMod {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         GameRegistry.registerWorldGenerator(new BOPLegacyWorldGenerator(), 0);
-        decreaseKoruRarity();
+        // 移除了 decreaseKoruRarity() 调用
         cakeCleanup();
 
         if (config.waspHiveRarityModifier > 0) {
@@ -131,7 +127,7 @@ public class BOPIntegrationMod {
 
         try {
             CraftingManager craftingManager = CraftingManager.getInstance();
-            List<IRecipe> recipesToRemove = new ArrayList<>();
+            List<IRecipe> recipesToRemove = new ArrayList<IRecipe>();
             for (Object obj : craftingManager.getRecipeList()) {
                 if (obj instanceof IRecipe) {
                     IRecipe recipe = (IRecipe) obj;
@@ -151,48 +147,6 @@ public class BOPIntegrationMod {
         catch (Exception ex) {
             ex.printStackTrace();
             return false;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private void decreaseKoruRarity() {
-        try {
-            Field[] biomeFields = BOPCBiomes.class.getDeclaredFields();
-            for (Field biomeField : biomeFields) {
-                BOPBiome<BOPBiomeDecorator<? extends BiomeFeatures>> biome =
-                        (BOPBiome<BOPBiomeDecorator<? extends BiomeFeatures>>) biomeField.get(null);
-
-                if (biome != null) {
-                    // 使用反射安全地访问装饰器字段
-                    Field decoratorField = null;
-                    try {
-                        // 首先尝试 theBiomeDecorator 字段
-                        decoratorField = biome.getClass().getDeclaredField("theBiomeDecorator");
-                    } catch (NoSuchFieldException e) {
-                        try {
-                            // 如果不存在，尝试 field_76760_I 字段（Minecraft 的混淆字段名）
-                            decoratorField = biome.getClass().getSuperclass().getDeclaredField("field_76760_I");
-                        } catch (NoSuchFieldException ex) {
-                            logger.error("Could not find decorator field in biome: " + biome.biomeName);
-                            continue;
-                        }
-                    }
-
-                    decoratorField.setAccessible(true);
-                    Object decorator = decoratorField.get(biome);
-
-                    if (decorator != null && decorator instanceof BOPOverworldBiomeDecorator) {
-                        BOPOverworldBiomeDecorator bopDecorator = (BOPOverworldBiomeDecorator) decorator;
-                        OverworldBiomeFeatures features = bopDecorator.bopFeatures;
-                        if (features.koruPerChunk > 0) {
-                            features.koruPerChunk *= 8;
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 
