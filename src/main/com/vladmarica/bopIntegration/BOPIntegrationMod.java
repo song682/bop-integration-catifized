@@ -1,14 +1,10 @@
 package com.vladmarica.bopIntegration;
 
-import biomesoplenty.api.biome.BOPBiome;
-import biomesoplenty.api.biome.BOPBiomeDecorator;
-import biomesoplenty.api.content.BOPCBiomes;
 import biomesoplenty.api.content.BOPCBlocks;
 import biomesoplenty.api.content.BOPCItems;
-import biomesoplenty.common.biome.decoration.BOPOverworldBiomeDecorator;
-import biomesoplenty.common.biome.decoration.OverworldBiomeFeatures;
 import biomesoplenty.common.blocks.BlockBOPFoliage;
 import biomesoplenty.common.world.generation.WorldGenFieldAssociation;
+import com.vladmarica.bopIntegration.ic2.IC2CompatWorldGenerator;
 import com.vladmarica.bopIntegration.tweaks.BOPLegacyWorldGenerator;
 import com.vladmarica.bopIntegration.tweaks.WorldGenNothing;
 import com.vladmarica.bopIntegration.thaumcraft.ThaumcraftModCompat;
@@ -92,6 +88,15 @@ public class BOPIntegrationMod {
         }
         else {
             logger.info("Thaumcraft not found - skipping integration patch");
+        }
+
+        // 新增 IC2 兼容性
+        if (Loader.isModLoaded("IC2") && config.fixIC2RubberTrees) {
+            GameRegistry.registerWorldGenerator(new IC2CompatWorldGenerator(), 10);
+            logger.info("IC2 rubber tree fix applied");
+        }
+        else if (config.fixIC2RubberTrees) {
+            logger.info("IC2 not found - skipping rubber tree fix");
         }
     }
 
