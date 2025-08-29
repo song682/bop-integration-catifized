@@ -1,7 +1,10 @@
-A Minecraft 1.7.10 mod for making Biomes O' Plenty work better with other mods, as well as adding some personal tweaks.
-These interactions may been fixed in newer versions of Biomes O' Plenty, but not for 1.7.10.
+# Biomes O' Plenty Integraton - Catified
 
-Every change can be enabled or disabled in the config file.
+A Minecraft 1.7.10 mod for making Biomes O' Plenty work better with other mods, as well as adding some personal tweaks.     
+These interactions may been fixed in newer versions of Biomes O' Plenty, but not for 1.7.10.    
+Every change can be enabled or disabled in the config file.     
+
+Tweaked by dfdvdsf.
 
 ## **Changes**
 * General Tweaks
@@ -17,10 +20,14 @@ Every change can be enabled or disabled in the config file.
     * Allow Silverwood trees to spawn all BOP biomes that are forests or plains.
     * Add Aspects to some BOP items that were missing them.
 * Industrialcraft 2
-    * Fixed the spawning behaviour of Rubber Trees. No more hundreds of floating Rubber Trees in marsh biomes.
+    * The former Industrialcraft 2 integratiion chunk is removed for the reason that can't compatibility in modern 1.7.10 mixin environment.   
 
 ## **Requirements**
-* [Biomes O' Plenty for 1.7.10](https://minecraft.curseforge.com/projects/biomes-o-plenty)
+* [Biomes O' Plenty for 1.7.10](https://minecraft.curseforge.com/projects/biomes-o-plenty)    
 * [Minecraft Forge](http://files.minecraftforge.net/maven/net/minecraftforge/forge/index_1.7.10.html) (whatever version BOP requires)
 
-All other mods are optional. For example, this mod won't crash if you don't include Thaumcraft.
+## **Optional**
+* [Thuamcraft](https://www.curseforge.com/minecraft/mc-mods/thaumcraft)
+
+## Licence
+[MIT Licence](LICENSE)
