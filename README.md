@@ -15,6 +15,7 @@ The entry that have a "(*)" symbol means added by dfdvdsf.
     * Made the Biome Finder recipe harder by making it require Celestial Crystals and Ghastly Souls.
     * Added a recipe to craft Rotten Flesh out of Chunks of Flesh and Eyebulbs.
     * Added an option to lower the spawn rate of nether wasp hives.
+    * Disabled the Craftable rotten flesh block. (*)
     * Remove decrease koru rarity for it is incompatible with modern 1.7.10 mixin environment. (*)
 
 * Thaumcraft
