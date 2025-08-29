@@ -30,6 +30,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import org.apache.logging.log4j.LogManager;
@@ -58,7 +59,6 @@ public class BOPIntegrationMod {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         GameRegistry.registerWorldGenerator(new BOPLegacyWorldGenerator(), 0);
-        decreaseKoruRarity();
         cakeCleanup();
 
         if (config.waspHiveRarityModifier > 0) {
@@ -91,12 +91,14 @@ public class BOPIntegrationMod {
             }
         }
 
+
         if (Loader.isModLoaded("Thaumcraft")) {
             ThaumcraftModCompat.apply();
         }
         else {
             logger.info("Thaumcraft not found - skipping integration patch");
         }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -154,47 +156,6 @@ public class BOPIntegrationMod {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private void decreaseKoruRarity() {
-        try {
-            Field[] biomeFields = BOPCBiomes.class.getDeclaredFields();
-            for (Field biomeField : biomeFields) {
-                BOPBiome<BOPBiomeDecorator<? extends BiomeFeatures>> biome =
-                        (BOPBiome<BOPBiomeDecorator<? extends BiomeFeatures>>) biomeField.get(null);
-
-                if (biome != null) {
-                    // 使用反射安全地访问装饰器字段
-                    Field decoratorField = null;
-                    try {
-                        // 首先尝试 theBiomeDecorator 字段
-                        decoratorField = biome.getClass().getDeclaredField("theBiomeDecorator");
-                    } catch (NoSuchFieldException e) {
-                        try {
-                            // 如果不存在，尝试 field_76760_I 字段（Minecraft 的混淆字段名）
-                            decoratorField = biome.getClass().getSuperclass().getDeclaredField("field_76760_I");
-                        } catch (NoSuchFieldException ex) {
-                            logger.error("Could not find decorator field in biome: " + biome.biomeName);
-                            continue;
-                        }
-                    }
-
-                    decoratorField.setAccessible(true);
-                    Object decorator = decoratorField.get(biome);
-
-                    if (decorator != null && decorator instanceof BOPOverworldBiomeDecorator) {
-                        BOPOverworldBiomeDecorator bopDecorator = (BOPOverworldBiomeDecorator) decorator;
-                        OverworldBiomeFeatures features = bopDecorator.bopFeatures;
-                        if (features.koruPerChunk > 0) {
-                            features.koruPerChunk *= 8;
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onHarvest(BlockEvent.HarvestDropsEvent event) {
