@@ -9,7 +9,6 @@ import biomesoplenty.common.biome.decoration.BOPOverworldBiomeDecorator;
 import biomesoplenty.common.biome.decoration.OverworldBiomeFeatures;
 import biomesoplenty.common.blocks.BlockBOPFoliage;
 import biomesoplenty.common.world.generation.WorldGenFieldAssociation;
-import biomesoplenty.api.biome.BiomeFeatures;
 import com.vladmarica.bopIntegration.tweaks.BOPLegacyWorldGenerator;
 import com.vladmarica.bopIntegration.tweaks.WorldGenNothing;
 import com.vladmarica.bopIntegration.thaumcraft.ThaumcraftModCompat;
@@ -30,18 +29,14 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
 
 @Mod(modid = BOPIntegrationMod.MODID, version = "1.1 - Kittified", dependencies = "required-after:BiomesOPlenty")
 public class BOPIntegrationMod {
@@ -59,6 +54,7 @@ public class BOPIntegrationMod {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         GameRegistry.registerWorldGenerator(new BOPLegacyWorldGenerator(), 0);
+        // 移除了 decreaseKoruRarity() 调用
         cakeCleanup();
 
         if (config.waspHiveRarityModifier > 0) {
@@ -91,14 +87,12 @@ public class BOPIntegrationMod {
             }
         }
 
-
         if (Loader.isModLoaded("Thaumcraft")) {
             ThaumcraftModCompat.apply();
         }
         else {
             logger.info("Thaumcraft not found - skipping integration patch");
         }
-
     }
 
     @SuppressWarnings("unchecked")
@@ -133,7 +127,7 @@ public class BOPIntegrationMod {
 
         try {
             CraftingManager craftingManager = CraftingManager.getInstance();
-            List<IRecipe> recipesToRemove = new ArrayList<>();
+            List<IRecipe> recipesToRemove = new ArrayList<IRecipe>();
             for (Object obj : craftingManager.getRecipeList()) {
                 if (obj instanceof IRecipe) {
                     IRecipe recipe = (IRecipe) obj;
@@ -155,7 +149,6 @@ public class BOPIntegrationMod {
             return false;
         }
     }
-
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onHarvest(BlockEvent.HarvestDropsEvent event) {
