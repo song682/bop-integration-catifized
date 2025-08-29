@@ -161,11 +161,32 @@ public class BOPIntegrationMod {
             for (Field biomeField : biomeFields) {
                 BOPBiome<BOPBiomeDecorator<? extends BiomeFeatures>> biome =
                         (BOPBiome<BOPBiomeDecorator<? extends BiomeFeatures>>) biomeField.get(null);
-                if (biome != null && biome.theBiomeDecorator != null && biome.theBiomeDecorator instanceof BOPOverworldBiomeDecorator) {
-                    BOPOverworldBiomeDecorator decorator = (BOPOverworldBiomeDecorator) biome.theBiomeDecorator;
-                    OverworldBiomeFeatures features = decorator.bopFeatures;
-                    if (features.koruPerChunk > 0) {
-                        features.koruPerChunk *= 8;
+
+                if (biome != null) {
+                    // 使用反射安全地访问装饰器字段
+                    Field decoratorField = null;
+                    try {
+                        // 首先尝试 theBiomeDecorator 字段
+                        decoratorField = biome.getClass().getDeclaredField("theBiomeDecorator");
+                    } catch (NoSuchFieldException e) {
+                        try {
+                            // 如果不存在，尝试 field_76760_I 字段（Minecraft 的混淆字段名）
+                            decoratorField = biome.getClass().getSuperclass().getDeclaredField("field_76760_I");
+                        } catch (NoSuchFieldException ex) {
+                            logger.error("Could not find decorator field in biome: " + biome.biomeName);
+                            continue;
+                        }
+                    }
+
+                    decoratorField.setAccessible(true);
+                    Object decorator = decoratorField.get(biome);
+
+                    if (decorator != null && decorator instanceof BOPOverworldBiomeDecorator) {
+                        BOPOverworldBiomeDecorator bopDecorator = (BOPOverworldBiomeDecorator) decorator;
+                        OverworldBiomeFeatures features = bopDecorator.bopFeatures;
+                        if (features.koruPerChunk > 0) {
+                            features.koruPerChunk *= 8;
+                        }
                     }
                 }
             }
