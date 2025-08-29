@@ -21,7 +21,7 @@ The entry that have a "(*)" symbol means added by dfdvdsf, "(&)" means changed b
     * Allow Silverwood trees to spawn all BOP biomes that are forests or plains.
     * Add Aspects to some BOP items that were missing them.
 * Industrialcraft 2
-    * The former Industrialcraft 2 integratiion chunk is removed for the reason that can't compatible in modern 1.7.10 mixin environment. (*)
+    * The former Industrialcraft 2 integratiion module is removed between 1.0.1 to 1.0.6 for the reason that can't compatible in modern 1.7.10 mixin environment. After 1.1.0 it fixed the spawning behaviour of Rubber Trees. No more hundreds of floating Rubber Trees in marsh biomes. (*)
 
 ## **Requirements**
 * [Biomes O' Plenty for 1.7.10](https://minecraft.curseforge.com/projects/biomes-o-plenty)    
@@ -29,6 +29,7 @@ The entry that have a "(*)" symbol means added by dfdvdsf, "(&)" means changed b
 
 ## **Optional**
 * [Thuamcraft](https://www.curseforge.com/minecraft/mc-mods/thaumcraft)
+* [IndustrialCraft2](https://www.curseforge.com/minecraft/mc-mods/industrial-craft)
 
 ## Licence
 [MIT Licence](LICENSE)
