@@ -1,6 +1,6 @@
-package com.vladmarica.bop.thaumcraft;
+package com.vladmarica.bopIntegration.thaumcraft;
 import biomesoplenty.api.biome.BOPBiome;
-import com.vladmarica.bop.BOPIntegrationMod;
+import com.vladmarica.bopIntegration.BOPIntegrationMod;
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;

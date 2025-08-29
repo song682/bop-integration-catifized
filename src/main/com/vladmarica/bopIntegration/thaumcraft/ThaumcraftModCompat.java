@@ -1,9 +1,8 @@
-package com.vladmarica.bop.thaumcraft;
+package com.vladmarica.bopIntegration.thaumcraft;
 
 import biomesoplenty.api.content.BOPCBlocks;
 import biomesoplenty.api.content.BOPCItems;
-import com.vladmarica.bop.BOPIntegrationMod;
-import com.vladmarica.bop.thaumcraft.ThaumcraftCompatWorldGenerator;
+import com.vladmarica.bopIntegration.BOPIntegrationMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApi;

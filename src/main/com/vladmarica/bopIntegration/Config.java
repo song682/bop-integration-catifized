@@ -1,4 +1,4 @@
-package com.vladmarica.bop;
+package com.vladmarica.bopIntegration;
 
 import net.minecraftforge.common.config.Configuration;
 
@@ -17,7 +17,6 @@ public class Config {
     public float waspHiveRarityModifier;
     public boolean fixSilverwoodTrees;
     public boolean addMissingAspects;
-    public boolean fixRubberTrees;
 
     public Config(File file) {
         configurationFile = new Configuration(file);
@@ -40,7 +39,6 @@ public class Config {
         waspHiveRarityModifier = configurationFile.getFloat("waspHiveRarityModifier", "Tweaks", 1.0F, 0.0F, 1.0F, "You can use this option to make nether wasp hives rarer.");
         fixSilverwoodTrees = configurationFile.getBoolean("fixSilverwoodTrees", "Thaumcraft", true, "Allows Silverwood trees to spawn in all forest and plains biomes.");
         addMissingAspects = configurationFile.getBoolean("addMissingAspects", "Thaumcraft", true, "Many BOP items don't give any aspects. ");
-        fixRubberTrees = configurationFile.getBoolean("fixRubberTrees", "IC2", true, "Fix rubber trees incorrecting spawning in grassland and marsh biomes.");
     }
 
     public void save() {

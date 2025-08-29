@@ -1,4 +1,4 @@
-package com.vladmarica.bop;
+package com.vladmarica.bopIntegration;
 
 import biomesoplenty.api.biome.BOPBiome;
 import biomesoplenty.api.biome.BOPBiomeDecorator;
@@ -9,11 +9,11 @@ import biomesoplenty.common.biome.decoration.BOPOverworldBiomeDecorator;
 import biomesoplenty.common.biome.decoration.OverworldBiomeFeatures;
 import biomesoplenty.common.blocks.BlockBOPFoliage;
 import biomesoplenty.common.world.generation.WorldGenFieldAssociation;
-import com.vladmarica.bop.ic2.IC2ModCompat;
-import com.vladmarica.bop.tweaks.BOPLegacyWorldGenerator;
-import com.vladmarica.bop.tweaks.WorldGenNothing;
-import com.vladmarica.bop.thaumcraft.ThaumcraftModCompat;
-import com.vladmarica.bop.tweaks.WorldGenWaspHiveFixed;
+import biomesoplenty.api.biome.BiomeFeatures;
+import com.vladmarica.bopIntegration.tweaks.BOPLegacyWorldGenerator;
+import com.vladmarica.bopIntegration.tweaks.WorldGenNothing;
+import com.vladmarica.bopIntegration.thaumcraft.ThaumcraftModCompat;
+import com.vladmarica.bopIntegration.tweaks.WorldGenWaspHiveFixed;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.Loader;
@@ -26,22 +26,23 @@ import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.IEventListener;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
-import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
-@Mod(modid = BOPIntegrationMod.MODID, version = "1.0", dependencies = "required-after:BiomesOPlenty")
+@Mod(modid = BOPIntegrationMod.MODID, version = "1.1 - Kittified", dependencies = "required-after:BiomesOPlenty")
 public class BOPIntegrationMod {
 
     static final String MODID = "BOPIntegration";
@@ -96,13 +97,6 @@ public class BOPIntegrationMod {
         else {
             logger.info("Thaumcraft not found - skipping integration patch");
         }
-
-        if (Loader.isModLoaded("IC2")) {
-            IC2ModCompat.apply();
-        }
-        else {
-            logger.info("IC2 not found - skipping integration patch");
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -137,7 +131,7 @@ public class BOPIntegrationMod {
 
         try {
             CraftingManager craftingManager = CraftingManager.getInstance();
-            List recipesToRemove = new ArrayList();
+            List<IRecipe> recipesToRemove = new ArrayList<>();
             for (Object obj : craftingManager.getRecipeList()) {
                 if (obj instanceof IRecipe) {
                     IRecipe recipe = (IRecipe) obj;
@@ -165,9 +159,10 @@ public class BOPIntegrationMod {
         try {
             Field[] biomeFields = BOPCBiomes.class.getDeclaredFields();
             for (Field biomeField : biomeFields) {
-                BOPBiome<BOPBiomeDecorator> biome = (BOPBiome<BOPBiomeDecorator>) biomeField.get(null);
-                if (biome != null && biome.field_76760_I != null && biome.field_76760_I instanceof BOPOverworldBiomeDecorator) {
-                    BOPOverworldBiomeDecorator decorator = (BOPOverworldBiomeDecorator) biome.field_76760_I;
+                BOPBiome<BOPBiomeDecorator<? extends BiomeFeatures>> biome =
+                        (BOPBiome<BOPBiomeDecorator<? extends BiomeFeatures>>) biomeField.get(null);
+                if (biome != null && biome.theBiomeDecorator != null && biome.theBiomeDecorator instanceof BOPOverworldBiomeDecorator) {
+                    BOPOverworldBiomeDecorator decorator = (BOPOverworldBiomeDecorator) biome.theBiomeDecorator;
                     OverworldBiomeFeatures features = decorator.bopFeatures;
                     if (features.koruPerChunk > 0) {
                         features.koruPerChunk *= 8;

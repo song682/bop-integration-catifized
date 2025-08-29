@@ -1,4 +1,4 @@
-package com.vladmarica.bop.tweaks;
+package com.vladmarica.bopIntegration.tweaks;
 
 import java.util.Random;
 
