@@ -4,7 +4,7 @@ A Minecraft 1.7.10 mod for making Biomes O' Plenty work better with other mods, 
 These interactions may been fixed in newer versions of Biomes O' Plenty, but not for 1.7.10.    
 Every change can be enabled or disabled in the config file.     
 
-Tweaked by dfdvdsf.
+The entry that have a "(*)" symbol means added by dfdvdsf.
 
 ## **Changes**
 * General Tweaks
@@ -15,12 +15,13 @@ Tweaked by dfdvdsf.
     * Made the Biome Finder recipe harder by making it require Celestial Crystals and Ghastly Souls.
     * Added a recipe to craft Rotten Flesh out of Chunks of Flesh and Eyebulbs.
     * Added an option to lower the spawn rate of nether wasp hives.
+    * Remove decrease koru rarity for it is incompatible with modern 1.7.10 mixin environment. (*)
 
 * Thaumcraft
     * Allow Silverwood trees to spawn all BOP biomes that are forests or plains.
     * Add Aspects to some BOP items that were missing them.
 * Industrialcraft 2
-    * The former Industrialcraft 2 integratiion chunk is removed for the reason that can't compatibility in modern 1.7.10 mixin environment.   
+    * The former Industrialcraft 2 integratiion chunk is removed for the reason that can't compatible in modern 1.7.10 mixin environment. (*)
 
 ## **Requirements**
 * [Biomes O' Plenty for 1.7.10](https://minecraft.curseforge.com/projects/biomes-o-plenty)    
