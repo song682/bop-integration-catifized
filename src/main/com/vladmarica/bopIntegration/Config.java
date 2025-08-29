@@ -22,7 +22,6 @@ public class Config {
         configurationFile = new Configuration(file);
         configurationFile.addCustomCategoryComment("Tweaks", "These options modify BOP itself. Some of these features are unavailable in the 1.7.10 version of BOP but existed in previous or later versions.");
         configurationFile.addCustomCategoryComment("Thaumcraft", "Options to make BOP work better with Thaumcraft");
-        configurationFile.addCustomCategoryComment("IC2", "Options to make BOP work better with IC2");
 
         configurationFile.load();
         sync();
