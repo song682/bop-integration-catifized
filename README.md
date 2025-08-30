@@ -1,4 +1,4 @@
-# Biomes O' Plenty Integraton - Catified
+# Biomes O' Plenty Integration—Catified
 
 A Minecraft 1.7.10 mod for making Biomes O' Plenty work better with other mods, as well as adding some personal tweaks.     
 These interactions may be fixed in newer versions of Biomes O' Plenty, but not for 1.7.10.    
@@ -8,20 +8,20 @@ The entry that has a "(*)" symbol means added by dfdvdsf, "(&)" means changed by
 
 ## **Changes**
 * General Tweaks
-    * Removed Gravestones from spawning in the Nether. They are useless.
-    * Made Biome Essence Ore spawn in the End.
-    * Made Celestial Crystals spawn in the End.
-    * Could remove the Enderporter recipe.
-    * Made the Biome Finder recipe harder by making it require Celestial Crystals and Ghastly Souls. (Disabled by default.(&))
-    * Added a recipe to craft Rotten Flesh out of Chunks of Flesh and Eyebulbs. (Disabled by default.(&))
-    * Added an option to lower the spawn rate of nether wasp hives.
-    * Remove decrease koru rarity for it is incompatible with modern 1.7.10 mixins environments. (*)
+  * Removed Gravestones from spawning in the Nether. They are useless.
+  * Made Biome Essence Ore spawn in the End.
+  * Made Celestial Crystals spawn in the End.
+  * Could remove the Enderporter recipe.(&)
+  * Made the Biome Finder recipe harder by making it require Celestial Crystals and Ghastly Souls. (Disabled by default.(&))
+  * Added a recipe to craft Rotten Flesh out of Chunks of Flesh and Eyebulbs. (Disabled by default.(&))
+  * Added an option to lower the spawn rate of nether wasp hives.
+  * Remove decrease koru rarity for it is incompatible with modern 1.7.10 mixins environments. (*)
 
 * Thaumcraft
-    * Allow Silverwood trees to spawn all BOP biomes that are forests or plains.
-    * Add Aspects to some BOP items that were missing them.
+  * Allow Silverwood trees to spawn all BOP biomes that are forests or plains.
+  * Add Aspects to some BOP items that were missing them.
 * Industrialcraft 2
-    * The former Industrialcraft 2 integratiion module is removed between 1.0.1 to 1.0.6 for the reason that can't be compatible in the modern 1.7.10 mixins environment. After 1.1.0 it fixed the spawning behaviour of Rubber Trees. No more hundreds of floating Rubber Trees in marsh biomes. (*)
+  * The former Industrialcraft 2 integration module is removed between 1.0.1 to 1.0.6 for the reason that can't be compatible in the modern 1.7.10 mixins environment. After 1.1.0 it fixed the spawning behavior of Rubber Trees. No more hundreds of floating Rubber Trees in marsh biomes. (*)
 
 ## **Requirements**
 * [Biomes O' Plenty for 1.7.10](https://minecraft.curseforge.com/projects/biomes-o-plenty)
