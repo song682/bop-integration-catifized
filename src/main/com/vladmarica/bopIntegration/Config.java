@@ -35,7 +35,7 @@ public class Config {
         genBiomeEssence = configurationFile.getBoolean("genBiomeEssence", "Tweaks", true, "Generate Biome Essence Ore in the End. Drops Biome Essence.");
         removeNetherGravestones = configurationFile.getBoolean("removeNetherGravestones", "Tweaks", true, "Prevent gravestones from spawning in the Nether. They are ugly and useless.");
         craftableRottenFlesh = configurationFile.getBoolean("craftableRottenFlesh", "Tweaks", false, "Adds a recipe to craft rotten flesh out of flesh chunks and an eyebulb.");
-        removeEnderporterRecipe = configurationFile.getBoolean("removeEnderporterRecipe", "Tweaks", true, "It can still be cheating in by an op.");
+        removeEnderporterRecipe = configurationFile.getBoolean("removeEnderporterRecipe", "Tweaks", false, "It can still be cheating in by an op.");
         harderBiomeFinderRecipe = configurationFile.getBoolean("harderBiomeFinderRecipe", "Tweaks", false, "Makes the recipe use end crystals and ghastly souls.");
         waspHiveRarityModifier = configurationFile.getFloat("waspHiveRarityModifier", "Tweaks", 1.0F, 0.0F, 1.0F, "You can use this option to make nether wasp hives rarer.");
         fixSilverwoodTrees = configurationFile.getBoolean("fixSilverwoodTrees", "Thaumcraft", false, "Allows Silverwood trees to spawn in all forest and plains biomes.");

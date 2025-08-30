@@ -22,6 +22,7 @@ import cpw.mods.fml.common.eventhandler.IEventListener;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -31,13 +32,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Mod(modid = BOPIntegrationMod.MODID, version = "1.1 - Kittified", dependencies = "required-after:BiomesOPlenty")
+import static com.vladmarica.bopIntegration.Tags.MODID;
+
+@Mod(modid = MODID, name = Tags.MODNAME, version = Tags.VERSION, dependencies = "required-after:BiomesOPlenty")
 public class BOPIntegrationMod {
 
-    static final String MODID = "BOPIntegration";
     public static final Logger logger = LogManager.getLogger(MODID);
     public static Config config;
 
@@ -50,7 +53,6 @@ public class BOPIntegrationMod {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         GameRegistry.registerWorldGenerator(new BOPLegacyWorldGenerator(), 0);
-        // 移除了 decreaseKoruRarity() 调用
         cakeCleanup();
 
         if (config.waspHiveRarityModifier > 0) {
@@ -62,7 +64,22 @@ public class BOPIntegrationMod {
         }
 
         if (config.craftableRottenFlesh) {
-            GameRegistry.addShapedRecipe(new ItemStack(Items.rotten_flesh, 4), "###", "#X#", "###", '#', new ItemStack(BOPCItems.misc, 1, 3), 'X', new ItemStack(BOPCBlocks.flowers, 1, 13));
+            // 使用更兼容的方法获取腐肉物品
+            Item rottenFleshItem;
+            try {
+                // 尝试通过字段获取
+                Field rottenFleshField = Items.class.getDeclaredField("rotten_flesh");
+                rottenFleshItem = (Item) rottenFleshField.get(null);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                // 如果字段不存在，尝试通过注册名获取
+                rottenFleshItem = (Item) Item.itemRegistry.getObject("rotten_flesh");
+                if (rottenFleshItem == null) {
+                    logger.error("Failed to get rotten flesh item!");
+                    return;
+                }
+            }
+
+            GameRegistry.addShapedRecipe(new ItemStack(rottenFleshItem, 4), "###", "#X#", "###", '#', new ItemStack(BOPCItems.misc, 1, 3), 'X', new ItemStack(BOPCBlocks.flowers, 1, 13));
         }
 
         if (config.removeEnderporterRecipe) {
@@ -131,21 +148,26 @@ public class BOPIntegrationMod {
         }
 
         try {
-            CraftingManager craftingManager = CraftingManager.getInstance();
-            List<IRecipe> recipesToRemove = new ArrayList<IRecipe>();
-            for (Object obj : craftingManager.getRecipeList()) {
-                if (obj instanceof IRecipe) {
-                    IRecipe recipe = (IRecipe) obj;
-                    ItemStack thisOutput = recipe.getRecipeOutput();
-                    if (thisOutput == null) {
-                        continue;
-                    }
+            // 使用更健壮的方法获取 CraftingManager 实例
+            CraftingManager craftingManager;
 
-                    if (thisOutput.getItem() == output.getItem() && thisOutput.getItemDamage() == output.getItemDamage()) {
-                        recipesToRemove.add(recipe);
-                    }
+            // 尝试通过反射获取实例字段
+            try {
+                Field instanceField = CraftingManager.class.getDeclaredField("instance");
+                instanceField.setAccessible(true);
+                craftingManager = (CraftingManager) instanceField.get(null);
+            } catch (NoSuchFieldException e) {
+                // 如果字段不存在，尝试调用 getInstance() 方法
+                try {
+                    Method getInstanceMethod = CraftingManager.class.getDeclaredMethod("getInstance");
+                    craftingManager = (CraftingManager) getInstanceMethod.invoke(null);
+                } catch (NoSuchMethodException ex) {
+                    logger.error("Could not find CraftingManager instance getter");
+                    return false;
                 }
             }
+
+            List<IRecipe> recipesToRemove = getIRecipes(output, craftingManager);
 
             return craftingManager.getRecipeList().removeAll(recipesToRemove);
         }
@@ -153,6 +175,24 @@ public class BOPIntegrationMod {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    private static List<IRecipe> getIRecipes(ItemStack output, CraftingManager craftingManager) {
+        List<IRecipe> recipesToRemove = new ArrayList<>();
+        for (Object obj : craftingManager.getRecipeList()) {
+            if (obj instanceof IRecipe) {
+                IRecipe recipe = (IRecipe) obj;
+                ItemStack thisOutput = recipe.getRecipeOutput();
+                if (thisOutput == null) {
+                    continue;
+                }
+
+                if (thisOutput.getItem() == output.getItem() && thisOutput.getItemDamage() == output.getItemDamage()) {
+                    recipesToRemove.add(recipe);
+                }
+            }
+        }
+        return recipesToRemove;
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
