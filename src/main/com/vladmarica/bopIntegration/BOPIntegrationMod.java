@@ -83,7 +83,8 @@ public class BOPIntegrationMod {
         }
 
         if (config.removeEnderporterRecipe) {
-            if (removeRecipe(new ItemStack(BOPCItems.enderporter, 1))) {
+            ItemStack enderporter = new ItemStack(BOPCItems.enderporter, 1);
+            if (removeRecipe(enderporter)) {
                 logger.info("Removed Enderporter recipe");
             }
             else {
@@ -92,8 +93,33 @@ public class BOPIntegrationMod {
         }
 
         if (config.harderBiomeFinderRecipe) {
-            if (removeRecipe(new ItemStack(BOPCItems.biomeFinder, 1))) {
-                GameRegistry.addShapedRecipe(new ItemStack(BOPCItems.biomeFinder, 1), "#X#", "XYX", "#X#", '#', new ItemStack(Items.emerald, 1), 'X', new ItemStack(BOPCBlocks.crystal, 1), 'Y', new ItemStack(BOPCItems.misc, 1, 10));
+            ItemStack biomeFinder = new ItemStack(BOPCItems.biomeFinder, 1);
+            if (removeRecipe(biomeFinder)) {
+                // 使用更兼容的方法获取绿宝石和晶体
+                Item emeraldItem = null;
+                Item crystalItem = null;
+
+                try {
+                    Field emeraldField = Items.class.getDeclaredField("emerald");
+                    emeraldItem = (Item) emeraldField.get(null);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    emeraldItem = (Item) Item.itemRegistry.getObject("emerald");
+                    if (emeraldItem == null) {
+                        emeraldItem = (Item) Item.itemRegistry.getObject("minecraft:emerald");
+                    }
+                }
+
+                try {
+                    crystalItem = (Item) Item.itemRegistry.getObject("BiomesOPlenty:crystal");
+                } catch (Exception e) {
+                    logger.error("Failed to get crystal item");
+                }
+
+                if (emeraldItem != null && crystalItem != null) {
+                    GameRegistry.addShapedRecipe(new ItemStack(BOPCItems.biomeFinder, 1), "#X#", "XYX", "#X#", '#', new ItemStack(emeraldItem, 1), 'X', new ItemStack(crystalItem, 1), 'Y', new ItemStack(BOPCItems.misc, 1, 10));
+                } else {
+                    logger.error("Failed to add harder Biome Finder recipe - missing items");
+                }
             }
             else {
                 logger.error("Failed to remove Biome Finder recipe!");
@@ -148,31 +174,39 @@ public class BOPIntegrationMod {
         }
 
         try {
-            // 使用更健壮的方法获取 CraftingManager 实例
-            CraftingManager craftingManager;
+            // 1.7.10 方式获取 CraftingManager
+            Field instanceField = CraftingManager.class.getDeclaredField("instance");
+            instanceField.setAccessible(true);
+            CraftingManager craftingManager = (CraftingManager) instanceField.get(null);
 
-            // 尝试通过反射获取实例字段
-            try {
-                Field instanceField = CraftingManager.class.getDeclaredField("instance");
-                instanceField.setAccessible(true);
-                craftingManager = (CraftingManager) instanceField.get(null);
-            } catch (NoSuchFieldException e) {
-                // 如果字段不存在，尝试调用 getInstance() 方法
-                try {
-                    Method getInstanceMethod = CraftingManager.class.getDeclaredMethod("getInstance");
-                    craftingManager = (CraftingManager) getInstanceMethod.invoke(null);
-                } catch (NoSuchMethodException ex) {
-                    logger.error("Could not find CraftingManager instance getter");
-                    return false;
+            List<IRecipe> recipes = craftingManager.getRecipeList();
+            boolean removed = false;
+
+            // 遍历并移除匹配的配方
+            for (int i = 0; i < recipes.size(); i++) {
+                IRecipe recipe = recipes.get(i);
+                if (recipe == null) continue;
+
+                ItemStack recipeOutput = recipe.getRecipeOutput();
+                if (recipeOutput == null) continue;
+
+                // 标准化比较（忽略堆叠数量）
+                ItemStack compareOutput = output.copy();
+                compareOutput.stackSize = 1;
+                recipeOutput = recipeOutput.copy();
+                recipeOutput.stackSize = 1;
+
+                if (ItemStack.areItemStacksEqual(compareOutput, recipeOutput)) {
+                    recipes.remove(i--);
+                    removed = true;
+                    logger.info("Removed recipe for: " + output.getDisplayName());
                 }
             }
 
-            List<IRecipe> recipesToRemove = getIRecipes(output, craftingManager);
-
-            return craftingManager.getRecipeList().removeAll(recipesToRemove);
+            return removed;
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("Error removing recipe for " + output.getDisplayName() + ": ", ex);
             return false;
         }
     }
