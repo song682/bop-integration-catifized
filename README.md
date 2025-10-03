@@ -34,7 +34,7 @@ The entry that has a "(*)" symbol means added by dfdvdsf, "(&)" means changed by
 * [IndustrialCraft2](https://www.curseforge.com/minecraft/mc-mods/industrial-craft)
 
 ## Credit
-[This website](https://www.pianshen.com/ask/513714028906/) helpedme to fix the problem of removing recipes. 
+[This website](https://www.pianshen.com/ask/513714028906/) helped me to fix the problem of removing recipes. 
 
 ## Licence
 [MIT Licence](LICENSE)
