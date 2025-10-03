@@ -35,6 +35,7 @@ The entry that has a "(*)" symbol means added by dfdvdsf, "(&)" means changed by
 
 ## Credit
 [This website](https://www.pianshen.com/ask/513714028906/) helped me to fix the problem of removing recipes. 
+[vladmarica](https://github.com/vladmarica), who created the origianl mods.
 
 ## Licence
 [MIT Licence](LICENSE)
