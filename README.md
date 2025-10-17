@@ -10,7 +10,7 @@ The entry that has a "(*)" symbol means added by dfdvdsf, "(&)" means changed by
 
 ## **Changes**
 * General Tweaks
-  * Removed Gravestones from spawning in the Nether. They are useless.
+  * Removed Gravestones from spawning in the Nether. 
   * Made Biome Essence Ore spawn in the End.
   * Made Celestial Crystals spawn in the End.
   * Could remove the Enderporter recipe.(&)
