@@ -6,6 +6,7 @@ import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.block.Block;
 
 import java.util.Random;
 import java.lang.reflect.Field;
@@ -69,6 +70,24 @@ public class BOPLegacyWorldGenerator implements IWorldGenerator {
                 int y = 10 + random.nextInt(60);
                 int z = chunkZ * 16 + random.nextInt(16);
                 crystalGenerator.generate(world, random, x, y, z);
+            }
+        }
+
+        if (BOPIntegrationMod.config.amethystEndGen) {
+            Block gemOre = Block.getBlockFromName("biomesoplenty:gem_ore");
+            if (gemOre == null) {
+                BOPIntegrationMod.logger.warn("Cannot find block biomesoplenty:gem_ore; skipping End generation.");
+                return;
+            }
+
+            for (int i = 0; i < 30; i++) { // 控制稀有度
+                int x = chunkX * 16 + random.nextInt(16);
+                int y = random.nextInt(31); // 高度范围 0-30
+                int z = chunkZ * 16 + random.nextInt(16);
+
+                if (world.getBlock(x, y, z) == Blocks.end_stone) {
+                    world.setBlock(x, y, z, gemOre, 0, 2);
+                }
             }
         }
     }
