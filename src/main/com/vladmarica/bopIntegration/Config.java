@@ -15,6 +15,7 @@ public class Config {
     public boolean removeEnderporterRecipe;
     public boolean harderBiomeFinderRecipe;
     public float waspHiveRarityModifier;
+    public int koruFrequencyMultiplier;
     public boolean fixSilverwoodTrees;
     public boolean addMissingAspects;
     public boolean fixIC2RubberTrees;
@@ -41,6 +42,7 @@ public class Config {
         fixSilverwoodTrees = configurationFile.getBoolean("fixSilverwoodTrees", "Thaumcraft", false, "Allows Silverwood trees to spawn in all forest and plains biomes.");
         addMissingAspects = configurationFile.getBoolean("addMissingAspects", "Thaumcraft", true, "Many BOP items don't give any aspects. ");
         fixIC2RubberTrees = configurationFile.getBoolean("fixRubberTrees", "IC2", false, "Fix rubber trees incorrecting spawning in grassland and marsh biomes.");
+        koruFrequencyMultiplier = configurationFile.getInt("koruFrequencyMultiplier", "Tweaks", 1, 0, 128, "Multiplier for Koru generation frequency. Set to 0 to disable Koru entirely.");
     }
 
     public void saveConfigurationFile() {

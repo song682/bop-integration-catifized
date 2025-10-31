@@ -1,7 +1,12 @@
 package com.vladmarica.bopIntegration;
 
+import biomesoplenty.api.biome.BOPBiome;
+import biomesoplenty.api.biome.BOPBiomeDecorator;
+import biomesoplenty.api.content.BOPCBiomes;
 import biomesoplenty.api.content.BOPCBlocks;
 import biomesoplenty.api.content.BOPCItems;
+import biomesoplenty.common.biome.decoration.BOPOverworldBiomeDecorator;
+import biomesoplenty.common.biome.decoration.OverworldBiomeFeatures;
 import biomesoplenty.common.blocks.BlockBOPFoliage;
 import biomesoplenty.common.world.generation.WorldGenFieldAssociation;
 import com.vladmarica.bopIntegration.ic2.IC2CompatWorldGenerator;
@@ -32,13 +37,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.vladmarica.bopIntegration.Tags.MODID;
 
-@Mod(modid = MODID, name = Tags.MODNAME, version = Tags.VERSION, dependencies = "required-after:BiomesOPlenty")
+@Mod(modid = MODID, name = Tags.MODNAME, version = Tags.VERSION, dependencies = "required-after:BiomesOPlenty", acceptedMinecraftVersions = "1.7.10")
 public class BOPIntegrationMod {
 
     public static final Logger logger = LogManager.getLogger(MODID);
@@ -96,7 +100,7 @@ public class BOPIntegrationMod {
             ItemStack biomeFinder = new ItemStack(BOPCItems.biomeFinder, 1);
             if (removeRecipe(biomeFinder)) {
                 // 使用更兼容的方法获取绿宝石和晶体
-                Item emeraldItem = null;
+                Item emeraldItem;
                 Item crystalItem = null;
 
                 try {
@@ -133,13 +137,18 @@ public class BOPIntegrationMod {
             logger.info("Thaumcraft not found - skipping integration patch");
         }
 
+        if (config.koruFrequencyMultiplier >= 0) {
+            increaseKoruFrequency();
+        }
+
         // 新增 IC2 兼容性
-        if (Loader.isModLoaded("IC2") && config.fixIC2RubberTrees) {
+        if (config.fixIC2RubberTrees) {
+            if(Loader.isModLoaded("IC2")){
             GameRegistry.registerWorldGenerator(new IC2CompatWorldGenerator(), 10);
             logger.info("IC2 rubber tree fix applied");
-        }
-        else if (config.fixIC2RubberTrees) {
-            logger.info("IC2 not found - skipping rubber tree fix");
+            } else {
+                logger.info("IC2 not found - skipping rubber tree fix");
+            }
         }
     }
 
@@ -227,6 +236,52 @@ public class BOPIntegrationMod {
             }
         }
         return recipesToRemove;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void increaseKoruFrequency() {
+        try {
+            int multiplier = config == null ? 8 : config.koruFrequencyMultiplier;
+            // 允许运行时设置 0 表示 "禁用 Koru"
+            if (multiplier < 0) multiplier = 0;
+
+            int modifiedCount = 0;
+            Field[] biomeFields = BOPCBiomes.class.getDeclaredFields();
+            for (Field biomeField : biomeFields) {
+                Object obj = biomeField.get(null); // 读取静态字段值
+                if (!(obj instanceof BOPBiome)) continue;
+
+                BOPBiome<?> biome = (BOPBiome<?>) obj;
+                if (biome == null) continue;
+
+                Object decoratorObj = biome.theBiomeDecorator;
+                if (!(decoratorObj instanceof BOPOverworldBiomeDecorator)) continue;
+
+                BOPOverworldBiomeDecorator decorator = (BOPOverworldBiomeDecorator) decoratorObj;
+                OverworldBiomeFeatures features = decorator.bopFeatures;
+                if (features == null) continue;
+
+                // 如果配置为0 -> 禁用 koru（设为0）
+                if (multiplier == 0) {
+                    if (features.koruPerChunk != 0) {
+                        features.koruPerChunk = 0;
+                        modifiedCount++;
+                    }
+                } else {
+                    // 乘法可能导致溢出或生成过多，这里做个上限保护（可根据需要调整）
+                    long newVal = (long) features.koruPerChunk * (long) multiplier;
+                    int capped = (int) Math.min(newVal, Integer.MAX_VALUE / 2); // 安全上限
+                    if (features.koruPerChunk != capped) {
+                        features.koruPerChunk = capped;
+                        modifiedCount++;
+                    }
+                }
+            }
+
+            logger.info("Adjusted Koru frequency with multiplier={} for {} biomes", multiplier, modifiedCount);
+        } catch (Exception ex) {
+            logger.warn("Failed to modify Koru frequency", ex);
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
