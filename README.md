@@ -17,7 +17,7 @@ The entry that has a "(*)" symbol means added by dfdvdsf, "(&)" means changed by
   * Made the Biome Finder recipe harder by making it require Celestial Crystals and Ghastly Souls. (Disabled by default.(&))
   * Added a recipe to craft Rotten Flesh out of Chunks of Flesh and Eyebulbs. (Disabled by default.(&))
   * Added an option to lower the spawn rate of nether wasp hives.
-  * Remove decrease koru rarity for it is incompatible with modern 1.7.10 mixins environments. (*)
+  * Modifiable Koru Rarity.(&)
 
 * Thaumcraft
   * Allow Silverwood trees to spawn all BOP biomes that are forests or plains.
