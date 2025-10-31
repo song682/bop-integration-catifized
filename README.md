@@ -18,6 +18,7 @@ The entry that has a "(*)" symbol means added by dfdvdsf, "(&)" means changed by
   * Added a recipe to craft Rotten Flesh out of Chunks of Flesh and Eyebulbs. (Disabled by default.(&))
   * Added an option to lower the spawn rate of nether wasp hives.
   * Modifiable Koru Rarity.(&)
+  * Ender Amethyst ore now IS spawned in the end. (*)
 
 * Thaumcraft
   * Allow Silverwood trees to spawn all BOP biomes that are forests or plains.
