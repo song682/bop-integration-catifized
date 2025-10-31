@@ -39,6 +39,24 @@ public class BOPLegacyWorldGenerator implements IWorldGenerator {
             if (dimensionId == 1) {
                 generateEnd(random, chunkX, chunkZ, world);
             }
+            // 控制 biomesoplenty:gem_ore 在主世界的生成
+            if (dimensionId == 0) {
+                if (!BOPIntegrationMod.config.genAmethystOreOverworld) {
+                    try {
+                        Block gemOre = Block.getBlockFromName("biomesoplenty:gem_ore");
+                        if (gemOre != null) {
+                            // 输出日志确认该配置生效
+                            BOPIntegrationMod.logger.info("Skipping biomesoplenty:gem_ore generation in Overworld (config disabled).");
+                        } else {
+                            BOPIntegrationMod.logger.warn("biomesoplenty:gem_ore block not found while disabling Overworld generation.");
+                        }
+                    } catch (Exception ex) {
+                        BOPIntegrationMod.logger.warn("Error while disabling amethyst ore generation in Overworld", ex);
+                    }
+                            // 提前返回，防止后续主世界矿石逻辑执行
+                    return;
+                }
+            }
         } catch (Exception e) {
             // 如果反射失败，尝试使用传统方法
             try {

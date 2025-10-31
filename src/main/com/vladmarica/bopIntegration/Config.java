@@ -19,6 +19,8 @@ public class Config {
     public boolean fixSilverwoodTrees;
     public boolean addMissingAspects;
     public boolean fixIC2RubberTrees;
+    public boolean amethystEndGen;
+    public boolean genAmethystOreOverworld;
 
     public Config(File file) {
         configurationFile = new Configuration(file);
@@ -43,6 +45,8 @@ public class Config {
         addMissingAspects = configurationFile.getBoolean("addMissingAspects", "Thaumcraft", true, "Many BOP items don't give any aspects. ");
         fixIC2RubberTrees = configurationFile.getBoolean("fixRubberTrees", "IC2", false, "Fix rubber trees incorrecting spawning in grassland and marsh biomes.");
         koruFrequencyMultiplier = configurationFile.getInt("koruFrequencyMultiplier", "Tweaks", 1, 0, 128, "Multiplier for Koru generation frequency. Set to 0 to disable Koru entirely.");
+        amethystEndGen = configurationFile.getBoolean("amethystEndGen", "Tweaks", false, "The Ender Amethyst ore is able to generate in the end now.");
+        genAmethystOreOverworld = configurationFile.getBoolean("genAmethystOreOverworld", "Tweaks", true, "Set false to disable it generated in the overworld");
     }
 
     public void saveConfigurationFile() {
