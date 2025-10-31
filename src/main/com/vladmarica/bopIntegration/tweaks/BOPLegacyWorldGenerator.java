@@ -74,9 +74,9 @@ public class BOPLegacyWorldGenerator implements IWorldGenerator {
         }
 
         if (BOPIntegrationMod.config.amethystEndGen) {
-            Block gemOre = Block.getBlockFromName("biomesoplenty:gem_ore");
+            Block gemOre = Block.getBlockFromName("BiomesOPlenty:gemOre");
             if (gemOre == null) {
-                BOPIntegrationMod.logger.warn("Cannot find block biomesoplenty:gem_ore; skipping End generation.");
+                BOPIntegrationMod.logger.warn("Cannot find block Ender Amethyst ore (BiomesOPlenty:gemOre); skipping End generation.");
                 return;
             }
 
