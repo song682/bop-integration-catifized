@@ -21,11 +21,13 @@ public class Config {
     public boolean fixIC2RubberTrees;
     public boolean amethystEndGen;
     public boolean genAmethystOreOverworld;
+    public boolean replaceGlowStoneInTower;
 
     public Config(File file) {
         configurationFile = new Configuration(file);
         configurationFile.addCustomCategoryComment("Tweaks", "These options modify BOP itself. Some of these features are unavailable in the 1.7.10 version of BOP but existed in previous or later versions.");
         configurationFile.addCustomCategoryComment("Thaumcraft", "Options to make BOP work better with Thaumcraft");
+        configurationFile.addCustomCategoryComment("HardCoreEnderExpansion", "Expand HEE's Feature with BOP");
         configurationFile.addCustomCategoryComment("IC2", "Options to make BOP work better with IC2");
 
         configurationFile.load();
@@ -47,6 +49,7 @@ public class Config {
         koruFrequencyMultiplier = configurationFile.getInt("koruFrequencyMultiplier", "Tweaks", 1, 0, 128, "Multiplier for Koru generation frequency. Set to 0 to disable Koru entirely.");
         amethystEndGen = configurationFile.getBoolean("amethystEndGen", "Tweaks", false, "The Ender Amethyst ore is able to generate in the end now.");
         genAmethystOreOverworld = configurationFile.getBoolean("genAmethystOreOverworld", "Tweaks", true, "Set false to disable it generated in the overworld");
+        replaceGlowStoneInTower =configurationFile.getBoolean("replaceGlowStoneInTower", "HardcoreEnderExpansion", false,"Replace the Glow Stone as Celestial Crystals ");
     }
 
     public void saveConfigurationFile() {
