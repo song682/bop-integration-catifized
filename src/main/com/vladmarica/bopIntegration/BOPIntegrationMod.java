@@ -1,7 +1,6 @@
 package com.vladmarica.bopIntegration;
 
 import biomesoplenty.api.biome.BOPBiome;
-import biomesoplenty.api.biome.BOPBiomeDecorator;
 import biomesoplenty.api.content.BOPCBiomes;
 import biomesoplenty.api.content.BOPCBlocks;
 import biomesoplenty.api.content.BOPCItems;
@@ -9,6 +8,7 @@ import biomesoplenty.common.biome.decoration.BOPOverworldBiomeDecorator;
 import biomesoplenty.common.biome.decoration.OverworldBiomeFeatures;
 import biomesoplenty.common.blocks.BlockBOPFoliage;
 import biomesoplenty.common.world.generation.WorldGenFieldAssociation;
+import com.vladmarica.bopIntegration.hee.TowerGlowstoneReplacer;
 import com.vladmarica.bopIntegration.ic2.IC2CompatWorldGenerator;
 import com.vladmarica.bopIntegration.tweaks.BOPLegacyWorldGenerator;
 import com.vladmarica.bopIntegration.tweaks.WorldGenNothing;
@@ -17,6 +17,7 @@ import com.vladmarica.bopIntegration.tweaks.WorldGenWaspHiveFixed;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -55,10 +56,7 @@ public class BOPIntegrationMod {
     }
 
     @EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        GameRegistry.registerWorldGenerator(new BOPLegacyWorldGenerator(), 0);
-        cakeCleanup();
-
+    public void init(FMLInitializationEvent event){
         if (config.waspHiveRarityModifier > 0) {
             WorldGenFieldAssociation.associateFeature("waspHivesPerChunk", new WorldGenWaspHiveFixed());
         }
@@ -143,13 +141,42 @@ public class BOPIntegrationMod {
 
         // 新增 IC2 兼容性
         if (config.fixIC2RubberTrees) {
-            if(Loader.isModLoaded("IC2")){
-            GameRegistry.registerWorldGenerator(new IC2CompatWorldGenerator(), 10);
-            logger.info("IC2 rubber tree fix applied");
+            if (Loader.isModLoaded("IC2")) {
+                GameRegistry.registerWorldGenerator (new IC2CompatWorldGenerator(), 10);
+                logger.info ("IC2 rubber tree fix applied");
             } else {
-                logger.info("IC2 not found - skipping rubber tree fix");
+                logger.error ("IC2 not found - skipping rubber tree fix");
+            }
+        } else {
+            if (Loader.isModLoaded("IC2")) {
+                logger.info ("IC2 is Installed, while the config fixIC2RubberTrees is disabled. Will not fix the rubber tree.");
+            } else {
+                logger.info ("Neither IC2 is installed, nor the config enabled, will do nothing.");
             }
         }
+
+        // 新增 HardcoreEnderExpansion 兼容性
+        if(config.replaceGlowStoneInTower) {
+            if (Loader.isModLoaded("HardcoreEnderExpansion")) {
+                // 注册自定义的世界生成器
+                MinecraftForge.TERRAIN_GEN_BUS.register(new TowerGlowstoneReplacer());
+                logger.info("Found HEE in mod list, the config replaceGlowStoneInTower is enabled, applying it into the game instance");
+            } else {
+                logger.info("HEE Not Found in mod list, though the config replaceGlowStoneInTower is enabled, skipping it.");
+            }
+        } else {
+            if(Loader.isModLoaded("HardcoreEnderExpansion")){
+                logger.info("Found HEE in mod list, while the config replaceGlowStoneInTower is enabled, skipping it.");
+            } else {
+                logger.info("Neither HEE is installed, nor the config enabled, will do nothing.");
+            }
+        }
+    }
+
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        GameRegistry.registerWorldGenerator(new BOPLegacyWorldGenerator(), 0);
+        cakeCleanup();
     }
 
     @SuppressWarnings("unchecked")
@@ -171,7 +198,7 @@ public class BOPIntegrationMod {
             return true;
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("Failed to unregister world generator:" + worldGenerator + ". Returned:" + ex);
             return false;
         }
     }

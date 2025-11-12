@@ -49,7 +49,7 @@ public class Config {
         koruFrequencyMultiplier = configurationFile.getInt("koruFrequencyMultiplier", "Tweaks", 1, 0, 128, "Multiplier for Koru generation frequency. Set to 0 to disable Koru entirely.");
         amethystEndGen = configurationFile.getBoolean("amethystEndGen", "Tweaks", false, "The Ender Amethyst ore is able to generate in the end now.");
         genAmethystOreOverworld = configurationFile.getBoolean("genAmethystOreOverworld", "Tweaks", true, "Set false to disable it generated in the overworld");
-        replaceGlowStoneInTower =configurationFile.getBoolean("replaceGlowStoneInTower", "HardcoreEnderExpansion", false,"Replace the Glow Stone as Celestial Crystals ");
+        replaceGlowStoneInTower = configurationFile.getBoolean("replaceGlowStoneInTower", "HardcoreEnderExpansion", false,"Replace the Glow Stone as Celestial Crystals ");
     }
 
     public void saveConfigurationFile() {
