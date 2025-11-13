@@ -18,7 +18,7 @@ public class TowerGlowstoneReplacer {
         if (world.provider.dimensionId != 1) return;
 
         Block glowstone = resolveGlowstone();
-        Block crystal = GameRegistry.findBlock("biomesoplenty", "crystal");
+        Block crystal = GameRegistry.findBlock("BiomesOPlenty", "crystal");
         if (glowstone == null || crystal == null) return;
 
         // 获取已生成的 StructureStart 对象
