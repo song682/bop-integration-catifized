@@ -50,4 +50,5 @@ The entry that has a "(\*)" symbol means added by dfdvdsf, "(&)" means changed b
 ---
 
 ## Licence
-[MIT Licence](LICENSE)
+Code - [MIT Licence](LICENSE)  
+Berry Bushes Textures - Copyright © 2025 dfdvdsf. All rights reserved.
