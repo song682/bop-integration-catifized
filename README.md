@@ -20,13 +20,14 @@ The entry that has a "(\*)" symbol means added by dfdvdsf, "(&)" means changed b
     *   Added an option to lower the spawn rate of nether wasp hives.
     *   Modifiable Koru Rarity.(&)
     *   Ender Amethyst ore now IS spawned in the end and disappeared from the overworld. (Disabled by default, set by diffirent configuration options)(\*)
+    *   The berry should be regrowable and plantable.
 *   Thaumcraft
     *   Allow Silverwood trees to spawn all BOP biomes that are forests or plains.
     *   Add Aspects to some BOP items that were missing them.
 *   Industrialcraft 2
     *   The former Industrialcraft 2 integration module is removed between 1.0.1 to 1.0.6 for the reason that can't be compatible in the modern 1.7.10 mixins environment. After 1.1.0 the fuction of fixing the spawning behavior of Rubber Trees, no more hundreds of floating Rubber Trees in marsh biomes. (disabled by default(&))
 * HardcoreEnder Expansion
-    * Replacing of Glowstone blocks in the Dungeon Tower with Celestial Crystals. (After 1.5.0| [#16](https://github.com/song682/bop-integration-catifized/issues/16))(*)
+    *   Replacing of Glowstone blocks in the Dungeon Tower with Celestial Crystals. (After 1.5.0| [#16](https://github.com/song682/bop-integration-catifized/issues/16))(\*)
 
 ---
 
