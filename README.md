@@ -42,6 +42,7 @@ The entry that has a "(\*)" symbol means added by dfdvdsf, "(&)" means changed b
 
 *   [Thuamcraft](https://www.curseforge.com/minecraft/mc-mods/thaumcraft)
 *   [IndustrialCraft2](https://www.curseforge.com/minecraft/mc-mods/industrial-craft)
+*   [Hardcore Ender Expansuion](https://modrinth.com/mod/hardcore-ender-expansion)
 
 ---
 
@@ -53,5 +54,5 @@ The entry that has a "(\*)" symbol means added by dfdvdsf, "(&)" means changed b
 ---
 
 ## Licence
-Code - [MIT Licence](LICENSE)  
-Berry Bushes Textures - Copyright © 2025 dfdvdsf. All rights reserved.
+Code - [MIT Licence](LICENSE)   
+Berry Bush Textures - Copyright © 2025 dfdvdsf. All rights reserved.  
