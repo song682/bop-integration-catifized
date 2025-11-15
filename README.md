@@ -8,6 +8,8 @@ Every change can be enabled or disabled in the config file.
 
 The entry that has a "(*)" symbol means added by dfdvdsf, "(&)" means changed by dfdvdsf.
 
+---
+
 ## **Changes**
 * General Tweaks
   * Removed Gravestones from spawning in the Nether. 
@@ -26,6 +28,8 @@ The entry that has a "(*)" symbol means added by dfdvdsf, "(&)" means changed by
 * Industrialcraft 2
   * The former Industrialcraft 2 integration module is removed between 1.0.1 to 1.0.6 for the reason that can't be compatible in the modern 1.7.10 mixins environment. After 1.1.0 the  fuction of fixing the spawning behavior of Rubber Trees, no more hundreds of floating Rubber Trees in marsh biomes. (disabled by default(&))
 
+---
+
 ## **Requirements**
 * [Biomes O' Plenty for 1.7.10](https://minecraft.curseforge.com/projects/biomes-o-plenty)
 * [Minecraft Forge](http://files.minecraftforge.net/maven/net/minecraftforge/forge/index_1.7.10.html) (whatever version BOP requires)
@@ -34,9 +38,13 @@ The entry that has a "(*)" symbol means added by dfdvdsf, "(&)" means changed by
 * [Thuamcraft](https://www.curseforge.com/minecraft/mc-mods/thaumcraft)
 * [IndustrialCraft2](https://www.curseforge.com/minecraft/mc-mods/industrial-craft)
 
+---
+
 ## Credit
 [This website](https://www.pianshen.com/ask/513714028906/) helped me to fix the problem of removing recipes.     
 [vladmarica](https://github.com/vladmarica), who created the origianl mods.
+
+---
 
 ## Licence
 [MIT Licence](LICENSE)
