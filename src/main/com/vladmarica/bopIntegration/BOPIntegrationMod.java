@@ -10,23 +10,26 @@ import biomesoplenty.common.blocks.BlockBOPFoliage;
 import biomesoplenty.common.world.generation.WorldGenFieldAssociation;
 import com.vladmarica.bopIntegration.hee.TowerGlowstoneReplacer;
 import com.vladmarica.bopIntegration.ic2.IC2CompatWorldGenerator;
-import com.vladmarica.bopIntegration.tweaks.BOPLegacyWorldGenerator;
-import com.vladmarica.bopIntegration.tweaks.WorldGenNothing;
 import com.vladmarica.bopIntegration.thaumcraft.ThaumcraftModCompat;
+import com.vladmarica.bopIntegration.tweaks.BOPLegacyWorldGenerator;
+import com.vladmarica.bopIntegration.tweaks.BlockBOPBerryBush;
+import com.vladmarica.bopIntegration.tweaks.WorldGenNothing;
 import com.vladmarica.bopIntegration.tweaks.WorldGenWaspHiveFixed;
+import com.vladmarica.bopIntegration.tweaks.event.EventBerryPlanting;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.EventBus;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.IEventListener;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -38,21 +41,31 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.vladmarica.bopIntegration.Tags.MODID;
 
-@Mod(modid = MODID, name = Tags.MODNAME, version = Tags.VERSION, dependencies = "required-after:BiomesOPlenty", acceptedMinecraftVersions = "1.7.10")
+@Mod(modid = MODID, name = Tags.MODNAME, version = Tags.VERSION, dependencies = "required-after:BiomesOPlenty", acceptedMinecraftVersions = "[1.7.10]")
 public class BOPIntegrationMod {
 
     public static final Logger logger = LogManager.getLogger(MODID);
     public static Config config;
+    public static Block bopBerryBush;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         config = new Config(event.getSuggestedConfigurationFile());
         MinecraftForge.EVENT_BUS.register(this);
+
+        if(config.growableBopBerry) {
+            EventBerryPlanting.register();
+            bopBerryBush = new BlockBOPBerryBush();
+            GameRegistry.registerBlock(bopBerryBush, "berry_bush");
+        }
     }
 
     @EventHandler
@@ -168,7 +181,7 @@ public class BOPIntegrationMod {
             if(Loader.isModLoaded("HardcoreEnderExpansion")){
                 logger.info("Found HEE in mod list, while the config replaceGlowStoneInTower is enabled, skipping it.");
             } else {
-                logger.info("Neither HEE is installed, nor the config enabled, will do nothing.");
+                logger.info("Neither HEE is installed, nor the co nfig enabled, will do nothing.");
             }
         }
     }
@@ -281,7 +294,13 @@ public class BOPIntegrationMod {
                 BOPBiome<?> biome = (BOPBiome<?>) obj;
                 if (biome == null) continue;
 
-                Object decoratorObj = biome.theBiomeDecorator;
+                Object decoratorObj;
+                try {
+                    decoratorObj = biome.getClass().getField("theBiomeDecorator").get(biome);
+                } catch (Throwable ignored1) {
+                    decoratorObj = biome.getClass().getField("field_76760_I").get(biome);
+                }
+
                 if (!(decoratorObj instanceof BOPOverworldBiomeDecorator)) continue;
 
                 BOPOverworldBiomeDecorator decorator = (BOPOverworldBiomeDecorator) decoratorObj;
