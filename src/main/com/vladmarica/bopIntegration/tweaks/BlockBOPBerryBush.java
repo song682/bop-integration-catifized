@@ -1,5 +1,6 @@
 package com.vladmarica.bopIntegration.tweaks;
 
+import biomesoplenty.BiomesOPlenty;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -16,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -28,13 +30,37 @@ public class BlockBOPBerryBush extends BlockBush implements IGrowable {
     private IIcon[] icons = new IIcon[4];
 
     public BlockBOPBerryBush() {
-        super(Material.plants);
+        super(getMaterialPlants());
         this.setHardness(0.0F);
         this.setStepSound(soundTypeGrass);
         this.setTickRandomly(true);
         setBlockName("bopBerryBush");
-        // 默认纹理占位（实际会在 registerBlockIcons 被覆盖）
+        this.setCreativeTab(BiomesOPlenty.tabBiomesOPlenty);
         setBlockTextureName("bopintegration:berry_bush_stage0");
+    }
+
+    private static Material getMaterialPlants() {
+        Class<?> cls = Material.class;
+        String[] names = new String[] {
+                "field_151585_k", // runtime obfuscated name
+                "plants",         // MCP SRG name
+                "PLANTS",         // possible alternative
+                "PLANT"           // possible alternative
+        };
+
+        for (String name : names) {
+            try {
+                java.lang.reflect.Field f = cls.getDeclaredField(name);
+                f.setAccessible(true);
+                Object value = f.get(null);
+                if (value instanceof Material) {
+                    return (Material) value;
+                }
+            } catch (Throwable ignored) {}
+        }
+
+        // fallback
+        return Material.vine; // vanilla plant/vine behavior
     }
 
     /* ---------------------------
@@ -63,6 +89,31 @@ public class BlockBOPBerryBush extends BlockBush implements IGrowable {
         if (world.isAirBlock(x, y, z)) return true;
         if (b == Blocks.tallgrass || b == Blocks.deadbush) return true;
         return super.canPlaceBlockAt(world, x, y, z);
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+
+        int meta = world.getBlockMetadata(x, y, z);
+
+        // Only act on fully grown bush
+        if (meta == 3) {
+            // SERVER: drop berries + reset stage
+            if (!world.isRemote) {
+                // Optional: drop berries (这里是掉落 2~4 个浆果)
+                Item berryItem = (Item) Item.itemRegistry.getObject("BiomesOPlenty:food");
+                if (berryItem != null) {
+                    int count = 2 + world.rand.nextInt(3); // 2~4
+                    this.dropBlockAsItem(world, x, y, z,
+                            new ItemStack(berryItem, count, 0));
+                }
+
+                // Reset to regrow stage (meta = 1)
+                world.setBlockMetadataWithNotify(x, y, z, 1, 3);
+            }
+            return true;
+        }
+        return false; // No special action for other stages
     }
 
     /* When block added, clear tallgrass there (same behavior as before) */
