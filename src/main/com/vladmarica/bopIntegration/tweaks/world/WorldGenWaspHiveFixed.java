@@ -1,4 +1,4 @@
-package com.vladmarica.bopIntegration.tweaks;
+package com.vladmarica.bopIntegration.tweaks.world;
 
 import biomesoplenty.common.world.features.nether.WorldGenWaspHive;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;
