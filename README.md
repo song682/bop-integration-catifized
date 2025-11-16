@@ -33,7 +33,6 @@ The entry that has a "(\*)" symbol means added by dfdvdsf, "(&)" means changed b
 
 ---
 
----
 
 ## **Requirements**
 
@@ -45,8 +44,6 @@ The entry that has a "(\*)" symbol means added by dfdvdsf, "(&)" means changed b
 *   [Thuamcraft](https://www.curseforge.com/minecraft/mc-mods/thaumcraft)
 *   [IndustrialCraft2](https://www.curseforge.com/minecraft/mc-mods/industrial-craft)
 *   [Hardcore Ender Expansuion](https://modrinth.com/mod/hardcore-ender-expansion)
-
----
 
 ---
 
