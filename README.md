@@ -10,8 +10,6 @@ The entry that has a "(\*)" symbol means added by dfdvdsf, "(&)" means changed b
 
 ---
 
----
-
 ## **Changes**
 
 *   General Tweaks
@@ -24,7 +22,7 @@ The entry that has a "(\*)" symbol means added by dfdvdsf, "(&)" means changed b
     *   Added an option to lower the spawn rate of nether wasp hives.
     *   Modifiable Koru Rarity.(&)
     *   Ender Amethyst ore now IS spawned in the end and disappeared from the overworld. (Disabled by default, set by diffirent configuration options)(\*)
-    *   The berry should be regrowable and plantable.
+    *   The berry should be regrowable and plantable.(\*)
 *   Thaumcraft
     *   Allow Silverwood trees to spawn all BOP biomes that are forests or plains.
     *   Add Aspects to some BOP items that were missing them.
