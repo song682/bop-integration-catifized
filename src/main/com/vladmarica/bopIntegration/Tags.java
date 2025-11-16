@@ -1,7 +1,7 @@
 package com.vladmarica.bopIntegration;
 
 public class Tags {
-    static final String MODID = "BOPIntegration";
-    static final String MODNAME = "BOPIntegration";
-    static final String VERSION =  "1.5.0 - Kittified";
+    static final String MODID = "BOPIntegrations";
+    static final String MODNAME = "BOPIntegrations";
+    static final String VERSION =  "1.6.0.5-Catized";
 }

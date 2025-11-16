@@ -22,6 +22,10 @@ public class Config {
     public boolean amethystEndGen;
     public boolean genAmethystOreOverworld;
     public boolean replaceGlowStoneInTower;
+    public boolean growableBopBerry;
+    public boolean disableBopOriginalBerryBush;
+    public boolean berryWorldGen;
+    public int berryClusterSize;
 
     public Config(File file) {
         configurationFile = new Configuration(file);
@@ -50,6 +54,9 @@ public class Config {
         amethystEndGen = configurationFile.getBoolean("amethystEndGen", "Tweaks", false, "The Ender Amethyst ore is able to generate in the end now.");
         genAmethystOreOverworld = configurationFile.getBoolean("genAmethystOreOverworld", "Tweaks", true, "Set false to disable it generated in the overworld");
         replaceGlowStoneInTower = configurationFile.getBoolean("replaceGlowStoneInTower", "HardcoreEnderExpansion", false,"Replace the Glow Stone as Celestial Crystals ");
+        growableBopBerry = configurationFile.getBoolean("growableBopBerry", "Tweaks", false, "Enable the berry bush planting and growing feature.");
+        disableBopOriginalBerryBush = configurationFile.getBoolean("disableBopOriginalBerryBush", "Tweaks", false, "Disable the original Berry Bush of Biomes O' Plenty generate in the world");
+        berryClusterSize = configurationFile.getInt("berryClusterSize", "Tweaks", 8, 0, 64, "Berry Bushes per chunk");
     }
 
     public void saveConfigurationFile() {

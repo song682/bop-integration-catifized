@@ -13,8 +13,9 @@ import com.vladmarica.bopIntegration.ic2.IC2CompatWorldGenerator;
 import com.vladmarica.bopIntegration.thaumcraft.ThaumcraftModCompat;
 import com.vladmarica.bopIntegration.tweaks.BOPLegacyWorldGenerator;
 import com.vladmarica.bopIntegration.tweaks.BlockBOPBerryBush;
-import com.vladmarica.bopIntegration.tweaks.WorldGenNothing;
-import com.vladmarica.bopIntegration.tweaks.WorldGenWaspHiveFixed;
+import com.vladmarica.bopIntegration.tweaks.world.WorldGenBerryBush;
+import com.vladmarica.bopIntegration.tweaks.world.WorldGenNothing;
+import com.vladmarica.bopIntegration.tweaks.world.WorldGenWaspHiveFixed;
 import com.vladmarica.bopIntegration.tweaks.event.EventBerryPlanting;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IWorldGenerator;
@@ -76,6 +77,14 @@ public class BOPIntegrationMod {
 
         if (config.removeNetherGravestones) {
             WorldGenFieldAssociation.associateFeature("gravesPerChunk", new WorldGenNothing());
+        }
+
+        if (config.disableBopOriginalBerryBush) {
+            WorldGenFieldAssociation.associateFeature("berryBushesPerChunk", new WorldGenNothing());
+        }
+
+        if(config.growableBopBerry){
+            WorldGenFieldAssociation.associateFeature("berryBushesPerChunk", new WorldGenBerryBush(BOPIntegrationMod.bopBerryBush, 0));
         }
 
         if (config.craftableRottenFlesh) {
