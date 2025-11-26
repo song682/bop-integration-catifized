@@ -2,6 +2,7 @@ package com.vladmarica.bopIntegration.tweaks;
 
 import biomesoplenty.api.content.BOPCBlocks;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;
+import com.vladmarica.bopIntegration.tweaks.world.WorldGenCrystals;
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;

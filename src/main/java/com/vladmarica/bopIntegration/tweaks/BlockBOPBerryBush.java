@@ -1,6 +1,7 @@
 package com.vladmarica.bopIntegration.tweaks;
 
 import biomesoplenty.BiomesOPlenty;
+import biomesoplenty.api.content.BOPCItems;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,9 +23,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockBOPBerryBush extends BlockBush implements IGrowable {
-
-    // 调试开关：上线后改为 false
-    private static final boolean DEBUG_LOG = false;
 
     @SideOnly(Side.CLIENT)
     private IIcon[] icons = new IIcon[4];
@@ -69,25 +67,21 @@ public class BlockBOPBerryBush extends BlockBush implements IGrowable {
     @Override
     public boolean canBlockStay(World world, int x, int y, int z) {
         Block soil = world.getBlock(x, y - 1, z);
-        boolean ok = (soil == Blocks.grass || soil == Blocks.dirt || soil == Blocks.farmland);
-        if (DEBUG_LOG && !ok) {
-            BOPIntegrationMod.logger.info ("[BerryBush] canBlockStay=false at " + x + "," + y + "," + z
-                    + " soil=" + (soil == null ? "null" : soil.getUnlocalizedName()));
-        }
-        return ok;
+        return (soil == Blocks.grass || soil == Blocks.dirt || soil == Blocks.farmland);
     }
+
 
     @Override
     protected boolean canPlaceBlockOn(Block block) {
-        return block == Blocks.grass || block == Blocks.dirt || block == Blocks.farmland;
+        return block == Blocks.grass || block == Blocks.dirt || block == Blocks.farmland ;
     }
 
     /* Allow placement on tallgrass/deadbush (so placing replaces them) */
     @Override
     public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-        Block b = world.getBlock(x, y, z);
+        Block block = world.getBlock(x, y, z);
         if (world.isAirBlock(x, y, z)) return true;
-        if (b == Blocks.tallgrass || b == Blocks.deadbush) return true;
+        if (block == Blocks.tallgrass || block == Blocks.deadbush) return true;
         return super.canPlaceBlockAt(world, x, y, z);
     }
 
@@ -111,6 +105,8 @@ public class BlockBOPBerryBush extends BlockBush implements IGrowable {
                 // Reset to regrow stage (meta = 1)
                 world.setBlockMetadataWithNotify(x, y, z, 1, 3);
             }
+
+            world.playSound(x + 0.5, y + 0.5, z + 0.5, "berry_bush.harvest", 1.0F, 1.0F, false);
             return true;
         }
         return false; // No special action for other stages
@@ -121,10 +117,7 @@ public class BlockBOPBerryBush extends BlockBush implements IGrowable {
     public void onBlockAdded(World world, int x, int y, int z) {
         // If there is tall grass or dead bush at the same pos, clear it (defensive)
         Block present = world.getBlock(x, y, z);
-        if (present == Blocks.tallgrass || present == Blocks.deadbush) {
-            world.setBlockToAir(x, y, z);
-            if (DEBUG_LOG) BOPIntegrationMod.logger.info("[BerryBush] onBlockAdded cleared tallgrass at " + x + "," + y + "," + z);
-        }
+        if (present == Blocks.tallgrass || present == Blocks.deadbush) world.setBlockToAir(x, y, z);
 
         super.onBlockAdded(world, x, y, z);
     }
@@ -138,10 +131,7 @@ public class BlockBOPBerryBush extends BlockBush implements IGrowable {
 
         if (!this.canBlockStay(world, x, y, z)) {
             // Instead of just setBlockToAir, explicitly drop items then clear block
-            if (!world.isRemote) {
-                this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-                if (DEBUG_LOG) BOPIntegrationMod.logger.info ("[BerryBush] neighbor change -> cannot stay -> dropping at " + x + "," + y + "," + z);
-            }
+            if (!world.isRemote) this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
 
             world.setBlockToAir(x, y, z);
         }
@@ -154,10 +144,8 @@ public class BlockBOPBerryBush extends BlockBush implements IGrowable {
 
         // If it cannot stay, drop and clear (defensive)
         if (!this.canBlockStay(world, x, y, z)) {
-            if (!world.isRemote) {
-                this.dropBlockAsItem (world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-                if (DEBUG_LOG) BOPIntegrationMod.logger.info ("[BerryBush] updateTick - cannot stay -> dropping at " + x + "," + y + "," + z);
-            }
+            if (!world.isRemote) this.dropBlockAsItem (world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+
             world.setBlockToAir (x, y, z);
             return;
         }
@@ -166,14 +154,18 @@ public class BlockBOPBerryBush extends BlockBush implements IGrowable {
         if (meta < 3 && rand.nextInt(10) == 0) {
             int newMeta = meta + 1;
             world.setBlockMetadataWithNotify(x, y, z, newMeta, 3);
-            if (DEBUG_LOG) BOPIntegrationMod.logger.info("[BerryBush] updateTick grew from " + meta + " to " + newMeta + " at " + x + "," + y + "," + z);
         }
+    }
+
+    @Override
+    public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+        if (world.isRemote) world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, "berry_bush.break", 1.0F, 1.0F);
+        super.breakBlock(world, x, y, z, block, meta);
     }
 
     /* Bone meal support */
     @Override
     public boolean func_149851_a(World world, int x, int y, int z, boolean isClient) {
-        // if disabled by config, return false (you can add ConfigHandler check here)
         return world.getBlockMetadata(x, y, z) < 3 && this.canBlockStay(world, x, y, z);
     }
 
@@ -184,22 +176,14 @@ public class BlockBOPBerryBush extends BlockBush implements IGrowable {
 
     @Override
     public void func_149853_b(World world, Random rand, int x, int y, int z) {
-        // double-check canBlockStay before applying bone meal
-        if (!this.canBlockStay(world, x, y, z)) {
-            if (DEBUG_LOG) BOPIntegrationMod.logger.info("[BerryBush] bone meal attempted but canBlockStay=false at " + x + "," + y + "," + z);
-            return;
-        }
         int meta = world.getBlockMetadata(x, y, z);
-        if (meta < 3) {
-            world.setBlockMetadataWithNotify(x, y, z, meta + 1, 3);
-            if (DEBUG_LOG) BOPIntegrationMod.logger.info("[BerryBush] bone meal progressed meta " + meta + " -> " + (meta + 1) + " at " + x + "," + y + "," + z);
-        }
+        if (meta < 3) world.setBlockMetadataWithNotify(x, y, z, meta + 1, 3);
     }
 
     /* Drops */
     @Override
     public Item getItemDropped(int meta, Random rand, int fortune) {
-        Item berry = (Item) Item.itemRegistry.getObject("BiomesOPlenty:food");
+        Item berry = BOPCItems.food;
         return (berry != null) ? berry : Item.getItemFromBlock(this);
     }
 
@@ -214,20 +198,15 @@ public class BlockBOPBerryBush extends BlockBush implements IGrowable {
     /* When player harvests - ensure correct drops */
     @Override
     public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
-
         // perform normal drop behavior
-        if (!world.isRemote) {
-            this.dropBlockAsItem(world, x, y, z, meta, 0);
-            if (DEBUG_LOG) BOPIntegrationMod.logger.info("[BerryBush] onBlockHarvested at " + x + "," + y + "," + z + " meta=" + meta + " by " + player.getCommandSenderName());
-        }
+        if (!world.isRemote) this.dropBlockAsItem(world, x, y, z, meta, 0);
         super.onBlockHarvested(world, x, y, z, meta, player);
     }
 
     /* Harvest logic for creative / silk touch etc. */
     @Override
     public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta) {
-        if (DEBUG_LOG) BOPIntegrationMod.logger.info("[BerryBush] harvestBlock at " + x + "," + y + "," + z + " meta=" + meta + " by " + player.getCommandSenderName());
-        super.harvestBlock(world, player, x, y, z, meta);
+       super.harvestBlock(world, player, x, y, z, meta);
     }
 
     /* Register icons */
@@ -260,8 +239,6 @@ public class BlockBOPBerryBush extends BlockBush implements IGrowable {
             drops.add(new ItemStack(item, qty));
         }
 
-        if (DEBUG_LOG) BOPIntegrationMod.logger.info("[BerryBush] getDrops at " + x + "," + y + "," + z + " meta=" + metadata + " -> item=" + (item == null ? "null" : item.getUnlocalizedName()) + " qty=" + qty);
-
         return drops;
     }
 
@@ -270,8 +247,7 @@ public class BlockBOPBerryBush extends BlockBush implements IGrowable {
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
         // Ensure metadata correct if stack contains information — default to 0
         world.setBlockMetadataWithNotify(x, y, z, 0, 3);
-        if (DEBUG_LOG) BOPIntegrationMod.logger.info("[BerryBush] onBlockPlacedBy at " + x + "," + y + "," + z + " by " + (placer == null ? "null" : (placer.getCommandSenderName())));
-        // super.onBlockPlacedBy(world, x, y, z, placer, stack);
+        world.playSound(x + 0.5, y + 0.5, z + 0.5, "bopintegration:berry_bush.plant", 1.0F, 1.0F, false);
     }
 
 }

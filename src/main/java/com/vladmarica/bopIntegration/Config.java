@@ -24,7 +24,6 @@ public class Config {
     public boolean replaceGlowStoneInTower;
     public boolean growableBopBerry;
     public boolean disableBopOriginalBerryBush;
-    public boolean berryWorldGen;
     public int berryClusterSize;
 
     public Config(File file) {

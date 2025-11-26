@@ -1,5 +1,6 @@
 package com.vladmarica.bopIntegration.tweaks.event;
 
+import biomesoplenty.api.content.BOPCItems;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;
 import com.vladmarica.bopIntegration.tweaks.BlockBOPBerryBush;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -17,9 +18,27 @@ public class EventBerryPlanting {
     @SubscribeEvent
     public void onRightClick(PlayerInteractEvent event) {
 
+        int x = event.x;
+        int y = event.y;
+        int z = event.z;
+
         // 种子一定要是在客户端种下后，服务端就已经知道并开始处理了。
         // Prevent ghost blocks: planting must only run on SERVER side, on SERVER side, on SERVER side.
-        if (event.world.isRemote) return;
+        if (event.world.isRemote) {
+            ItemStack held = event.entityPlayer.getHeldItem();
+            if (held != null) {
+                // Let client acknowledge right-click on replaceable blocks (grass/tallgrass/fern)
+                Item berry = (Item) Item.itemRegistry.getObject("BiomesOPlenty:food");
+                if (berry != null && held.getItem() == berry) {
+                    Block above = event.world.getBlock(x, y + 1, z);
+                    // If target is replaceable vegetation, allow client interaction
+                    if (above == Blocks.tallgrass || above == Blocks.deadbush || above == Blocks.double_plant) {
+                            event.setCanceled(true);
+                    }
+                }
+            }
+            return;
+        }
 
         if (event.action != PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) return;
 
@@ -32,17 +51,13 @@ public class EventBerryPlanting {
         ItemStack held = player.getHeldItem();
         if (held == null) return;
 
-        Item bopBerry = (Item) Item.itemRegistry.getObject("BiomesOPlenty:food");
+        Item bopBerry = BOPCItems.food;
         if (bopBerry == null) return;
 
         Item bushItem = Item.getItemFromBlock(BOPIntegrationMod.bopBerryBush);
         if (held.getItem() == bushItem) return;
-
         if (held.getItem() != bopBerry) return;
-
-        int x = event.x;
-        int y = event.y;
-        int z = event.z;
+        if (held.getItemDamage() != 0) return;
 
         if (event.face != 1) return;
 

@@ -362,7 +362,7 @@ public class BOPIntegrationMod {
             }
         }
         catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("Failed to unregister cake crafting handler", ex);
         }
     }
 }
