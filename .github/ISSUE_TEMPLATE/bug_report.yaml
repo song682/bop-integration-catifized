@@ -1,0 +1,91 @@
+---
+name: Bug report
+about: Create a report to help us improve
+title: "[Bugs]"
+labels: bug
+assignees: song682
+
+---
+name: Bug Report
+description: File a bug report.
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+  - song682
+body:
+  - type: markdown
+    attributes:
+      value: |
+        What bugs did it occured from your game? Send it freely at here
+  - type: input
+    id: contact
+    attributes:
+      label: Contact
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: Tell us what you see!
+      value: "A bug happened!"
+    validations:
+      required: true
+  - type: input
+    id: crash-report-url
+    attributes:
+      label: Crash Report
+      description: Do you have a crash report?
+      placeholder: ex. mclo.gs/_______
+    validations:
+      required: true
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: What version of our mod are you running?
+      options:
+        - Latest
+        - Other
+      default: 0
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        :warning: **Important**
+        If you choose **Other** as the version, please fill in the version field below.
+  - type: input
+    id: version_other
+    attributes:
+      label: If "Other", please specify the exact version
+      description: |
+        Only required if you selected **Other** above.
+        Example: v1.2.3, commit hash, or nightly build date.
+      placeholder: e.g. v1.3.0-beta.2
+    validations:
+      required: false
+**Describe the bug**
+A clear and concise description of what the bug is.
+
+**Minimum Reproduced Mods**
+- list of reproduced mods
+
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
+
+**Url of Crash Report**
+[Crash Report](url)
+
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
+
+**Additional context**
+Add any other context about the problem here.
