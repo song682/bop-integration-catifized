@@ -1,11 +1,3 @@
----
-name: Bug report
-about: Create a report to help us improve
-title: "[Bugs]"
-labels: bug
-assignees: song682
-
----
 name: Bug Report
 description: File a bug report.
 title: "[Bug]: "
@@ -68,24 +60,3 @@ body:
       placeholder: e.g. v1.3.0-beta.2
     validations:
       required: false
-**Describe the bug**
-A clear and concise description of what the bug is.
-
-**Minimum Reproduced Mods**
-- list of reproduced mods
-
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
-
-**Url of Crash Report**
-[Crash Report](url)
-
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
-
-**Additional context**
-Add any other context about the problem here.
