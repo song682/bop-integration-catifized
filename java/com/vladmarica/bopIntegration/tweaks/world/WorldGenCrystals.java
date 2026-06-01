@@ -1,13 +1,13 @@
 package com.vladmarica.bopIntegration.tweaks.world;
 
-import java.util.Random;
-
 import biomesoplenty.api.content.BOPCBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import java.util.Random;
 
 public class WorldGenCrystals extends WorldGenerator {
 
