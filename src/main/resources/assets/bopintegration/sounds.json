@@ -1,0 +1,20 @@
+{
+  "berry_bush.plant": {
+    "category": "block",
+    "sounds": [
+      "berry_bush/plant"
+    ]
+  },
+  "berry_bush.harvest": {
+    "category": "block",
+    "sounds": [
+      "berry_bush/harvest"
+    ]
+  },
+  "berry_bush.break": {
+    "category": "block",
+    "sounds": [
+      "berry_bush/break"
+    ]
+  }
+}

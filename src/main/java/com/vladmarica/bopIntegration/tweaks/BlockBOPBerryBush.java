@@ -2,6 +2,7 @@ package com.vladmarica.bopIntegration.tweaks;
 
 import biomesoplenty.BiomesOPlenty;
 import biomesoplenty.api.content.BOPCItems;
+import com.vladmarica.bopIntegration.BOPIntegrationMod;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -17,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -36,7 +38,27 @@ public class BlockBOPBerryBush extends BlockBush implements IGrowable {
     }
 
     private static Material getMaterialPlants() {
-        return Material.plants;
+        Class<?> cls = Material.class;
+        String[] names = new String[] {
+                "field_151585_k", // runtime obfuscated name
+                "plants",         // MCP SRG name
+                "PLANTS",         // possible alternative
+                "PLANT"           // possible alternative
+        };
+
+        for (String name : names) {
+            try {
+                java.lang.reflect.Field f = cls.getDeclaredField(name);
+                f.setAccessible(true);
+                Object value = f.get(null);
+                if (value instanceof Material) {
+                    return (Material) value;
+                }
+            } catch (Throwable ignored) {}
+        }
+
+        // fallback
+        return Material.vine; // vanilla plant/vine behavior
     }
 
     /* ---------------------------
