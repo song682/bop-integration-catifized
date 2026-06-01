@@ -1,22 +1,17 @@
 package com.vladmarica.bopIntegration;
 
-import biomesoplenty.api.biome.BOPBiome;
-import biomesoplenty.api.content.BOPCBiomes;
 import biomesoplenty.api.content.BOPCBlocks;
 import biomesoplenty.api.content.BOPCItems;
-import biomesoplenty.common.biome.decoration.BOPOverworldBiomeDecorator;
-import biomesoplenty.common.biome.decoration.OverworldBiomeFeatures;
-import biomesoplenty.common.blocks.BlockBOPFoliage;
 import biomesoplenty.common.world.generation.WorldGenFieldAssociation;
 import com.vladmarica.bopIntegration.hee.TowerGlowstoneReplacer;
-import com.vladmarica.bopIntegration.ic2.IC2CompatWorldGenerator;
 import com.vladmarica.bopIntegration.thaumcraft.ThaumcraftModCompat;
-import com.vladmarica.bopIntegration.tweaks.BOPLegacyWorldGenerator;
 import com.vladmarica.bopIntegration.tweaks.BlockBOPBerryBush;
+import com.vladmarica.bopIntegration.tweaks.event.EventBerryPlanting;
 import com.vladmarica.bopIntegration.tweaks.world.WorldGenBerryBush;
 import com.vladmarica.bopIntegration.tweaks.world.WorldGenNothing;
-import com.vladmarica.bopIntegration.tweaks.world.WorldGenWaspHiveFixed;
-import com.vladmarica.bopIntegration.tweaks.event.EventBerryPlanting;
+import com.vladmarica.bopIntegration.mixin.accessor.CraftingManagerAccessor;
+import com.vladmarica.bopIntegration.mixin.accessor.EventBusAccessor;
+import com.vladmarica.bopIntegration.mixin.accessor.GameRegistryAccessor;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.Loader;
@@ -26,9 +21,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.EventBus;
-import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.IEventListener;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
@@ -37,11 +30,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.BlockEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +51,6 @@ public class BOPIntegrationMod {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         config = new Config(event.getSuggestedConfigurationFile());
-        MinecraftForge.EVENT_BUS.register(this);
 
         if(config.growableBopBerry) {
             EventBerryPlanting.register();
@@ -71,14 +61,6 @@ public class BOPIntegrationMod {
 
     @EventHandler
     public void init(FMLInitializationEvent event){
-        if (config.waspHiveRarityModifier > 0) {
-            WorldGenFieldAssociation.associateFeature("waspHivesPerChunk", new WorldGenWaspHiveFixed());
-        }
-
-        if (config.removeNetherGravestones) {
-            WorldGenFieldAssociation.associateFeature("gravesPerChunk", new WorldGenNothing());
-        }
-
         if (config.disableBopOriginalBerryBush) {
             WorldGenFieldAssociation.associateFeature("berryBushesPerChunk", new WorldGenNothing());
         }
@@ -88,19 +70,10 @@ public class BOPIntegrationMod {
         }
 
         if (config.craftableRottenFlesh) {
-            // 使用更兼容的方法获取腐肉物品
-            Item rottenFleshItem;
-            try {
-                // 尝试通过字段获取
-                Field rottenFleshField = Items.class.getDeclaredField("rotten_flesh");
-                rottenFleshItem = (Item) rottenFleshField.get(null);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                // 如果字段不存在，尝试通过注册名获取
-                rottenFleshItem = (Item) Item.itemRegistry.getObject("rotten_flesh");
-                if (rottenFleshItem == null) {
-                    logger.error("Failed to get rotten flesh item!");
-                    return;
-                }
+            Item rottenFleshItem = Items.rotten_flesh;
+            if (rottenFleshItem == null) {
+                logger.error("Failed to get rotten flesh item!");
+                return;
             }
 
             GameRegistry.addShapedRecipe(new ItemStack(rottenFleshItem, 4), "###", "#X#", "###", '#', new ItemStack(BOPCItems.misc, 1, 3), 'X', new ItemStack(BOPCBlocks.flowers, 1, 13));
@@ -119,19 +92,8 @@ public class BOPIntegrationMod {
         if (config.harderBiomeFinderRecipe) {
             ItemStack biomeFinder = new ItemStack(BOPCItems.biomeFinder, 1);
             if (removeRecipe(biomeFinder)) {
-                // 使用更兼容的方法获取绿宝石和晶体
-                Item emeraldItem;
+                Item emeraldItem = Items.emerald;
                 Item crystalItem = null;
-
-                try {
-                    Field emeraldField = Items.class.getDeclaredField("emerald");
-                    emeraldItem = (Item) emeraldField.get(null);
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    emeraldItem = (Item) Item.itemRegistry.getObject("emerald");
-                    if (emeraldItem == null) {
-                        emeraldItem = (Item) Item.itemRegistry.getObject("minecraft:emerald");
-                    }
-                }
 
                 try {
                     crystalItem = (Item) Item.itemRegistry.getObject("BiomesOPlenty:crystal");
@@ -157,23 +119,16 @@ public class BOPIntegrationMod {
             logger.info("Thaumcraft not found - skipping integration patch");
         }
 
-        if (config.koruFrequencyMultiplier >= 0) {
-            increaseKoruFrequency();
-        }
-
-        // 新增 IC2 兼容性
+        // IC2 rubber tree fix (handled via Mixin into WorldGenRubTree)
         if (config.fixIC2RubberTrees) {
             if (Loader.isModLoaded("IC2")) {
-                GameRegistry.registerWorldGenerator (new IC2CompatWorldGenerator(), 10);
-                logger.info ("IC2 rubber tree fix applied");
+                logger.info ("IC2 rubber tree fix applied via Mixin");
             } else {
-                logger.error ("IC2 not found - skipping rubber tree fix");
+                logger.info ("IC2 not found - skipping rubber tree fix");
             }
         } else {
             if (Loader.isModLoaded("IC2")) {
-                logger.info ("IC2 is Installed, while the config fixIC2RubberTrees is disabled. Will not fix the rubber tree.");
-            } else {
-                logger.info ("Neither IC2 is installed, nor the config enabled, will do nothing.");
+                logger.info ("IC2 is installed, but fixIC2RubberTrees is disabled.");
             }
         }
 
@@ -197,20 +152,13 @@ public class BOPIntegrationMod {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        GameRegistry.registerWorldGenerator(new BOPLegacyWorldGenerator(), 0);
         cakeCleanup();
     }
 
-    @SuppressWarnings("unchecked")
     public static boolean unregisterWorldGenerator(IWorldGenerator worldGenerator) {
         try {
-            Field worldGeneratorsField = GameRegistry.class.getDeclaredField("worldGenerators");
-            worldGeneratorsField.setAccessible(true);
-            Field worldGeneratorIndexField = GameRegistry.class.getDeclaredField("worldGeneratorIndex");
-            worldGeneratorIndexField.setAccessible(true);
-
-            Set<IWorldGenerator> generators = (Set<IWorldGenerator>) worldGeneratorsField.get(worldGenerator);
-            Map<IWorldGenerator, Integer> generatorIndexMap = (Map<IWorldGenerator, Integer>) worldGeneratorIndexField.get(worldGenerator);
+            Set<IWorldGenerator> generators = GameRegistryAccessor.getWorldGenerators();
+            Map<IWorldGenerator, Integer> generatorIndexMap = GameRegistryAccessor.getWorldGeneratorIndex();
             if (!generators.contains(worldGenerator)) {
                 return false;
             }
@@ -225,17 +173,13 @@ public class BOPIntegrationMod {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static boolean removeRecipe(ItemStack output) {
         if (output == null) {
             return false;
         }
 
         try {
-            // 1.7.10 方式获取 CraftingManager
-            Field instanceField = CraftingManager.class.getDeclaredField("instance");
-            instanceField.setAccessible(true);
-            CraftingManager craftingManager = (CraftingManager) instanceField.get(null);
+            CraftingManager craftingManager = CraftingManagerAccessor.getInstance();
 
             List<IRecipe> recipes = craftingManager.getRecipeList();
             boolean removed = false;
@@ -269,94 +213,13 @@ public class BOPIntegrationMod {
         }
     }
 
-    private static List<IRecipe> getIRecipes(ItemStack output, CraftingManager craftingManager) {
-        List<IRecipe> recipesToRemove = new ArrayList<>();
-        for (Object obj : craftingManager.getRecipeList()) {
-            if (obj instanceof IRecipe) {
-                IRecipe recipe = (IRecipe) obj;
-                ItemStack thisOutput = recipe.getRecipeOutput();
-                if (thisOutput == null) {
-                    continue;
-                }
-
-                if (thisOutput.getItem() == output.getItem() && thisOutput.getItemDamage() == output.getItemDamage()) {
-                    recipesToRemove.add(recipe);
-                }
-            }
-        }
-        return recipesToRemove;
-    }
-
-    @SuppressWarnings("unchecked")
-    private void increaseKoruFrequency() {
-        try {
-            int multiplier = config == null ? 8 : config.koruFrequencyMultiplier;
-            // 允许运行时设置 0 表示 "禁用 Koru"
-            if (multiplier < 0) multiplier = 0;
-
-            int modifiedCount = 0;
-            Field[] biomeFields = BOPCBiomes.class.getDeclaredFields();
-            for (Field biomeField : biomeFields) {
-                Object obj = biomeField.get(null); // 读取静态字段值
-                if (!(obj instanceof BOPBiome)) continue;
-
-                BOPBiome<?> biome = (BOPBiome<?>) obj;
-                if (biome == null) continue;
-
-                Object decoratorObj;
-                try {
-                    decoratorObj = biome.getClass().getField("theBiomeDecorator").get(biome);
-                } catch (Throwable ignored1) {
-                    decoratorObj = biome.getClass().getField("field_76760_I").get(biome);
-                }
-
-                if (!(decoratorObj instanceof BOPOverworldBiomeDecorator)) continue;
-
-                BOPOverworldBiomeDecorator decorator = (BOPOverworldBiomeDecorator) decoratorObj;
-                OverworldBiomeFeatures features = decorator.bopFeatures;
-                if (features == null) continue;
-
-                // 如果配置为0 -> 禁用 koru（设为0）
-                if (multiplier == 0) {
-                    if (features.koruPerChunk != 0) {
-                        features.koruPerChunk = 0;
-                        modifiedCount++;
-                    }
-                } else {
-                    // 乘法可能导致溢出或生成过多，这里做个上限保护（可根据需要调整）
-                    long newVal = (long) features.koruPerChunk * (long) multiplier;
-                    int capped = (int) Math.min(newVal, Integer.MAX_VALUE / 2); // 安全上限
-                    if (features.koruPerChunk != capped) {
-                        features.koruPerChunk = capped;
-                        modifiedCount++;
-                    }
-                }
-            }
-
-            logger.info("Adjusted Koru frequency with multiplier={} for {} biomes", multiplier, modifiedCount);
-        } catch (Exception ex) {
-            logger.warn("Failed to modify Koru frequency", ex);
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onHarvest(BlockEvent.HarvestDropsEvent event) {
-        if (event.block.getClass() == BlockBOPFoliage.class && event.blockMetadata == 12) {
-            event.drops.clear();
-            event.dropChance = 1;
-            event.drops.add(new ItemStack(BOPCItems.turnipSeeds, 1));
-        }
-    }
-
-    @SuppressWarnings("unchecked")
     private void cakeCleanup() {
         try {
-            Field handlersField = EventBus.class.getDeclaredField("listeners");
-            handlersField.setAccessible(true);
-            ConcurrentHashMap<Object, ArrayList<IEventListener>> listeners = (ConcurrentHashMap<Object, ArrayList<IEventListener>>) handlersField.get(FMLCommonHandler.instance().bus());
+            EventBus bus = FMLCommonHandler.instance().bus();
+            ConcurrentHashMap<Object, ArrayList<IEventListener>> listeners = ((EventBusAccessor) bus).getListeners();
             for (Object o : listeners.keySet()) {
                 if (o.getClass().getSimpleName().equals("EventHandlerCake")) {
-                    FMLCommonHandler.instance().bus().unregister(o);
+                    bus.unregister(o);
                     logger.info("Unregistered cake crafting handler");
                 }
             }
