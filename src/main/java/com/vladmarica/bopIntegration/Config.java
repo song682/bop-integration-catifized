@@ -25,7 +25,6 @@ public class Config {
     public boolean growableBopBerry;
     public boolean disableBopOriginalBerryBush;
     public int berryClusterSize;
-    public boolean minersDelightEtFuturumCompat;
 
     public Config(File file) {
         configurationFile = new Configuration(file);
@@ -57,7 +56,6 @@ public class Config {
         growableBopBerry = configurationFile.getBoolean("growableBopBerry", "Tweaks", false, "Enable the berry bush planting and growing feature.");
         disableBopOriginalBerryBush = configurationFile.getBoolean("disableBopOriginalBerryBush", "Tweaks", false, "Disable the original Berry Bush of Biomes O' Plenty generate in the world");
         berryClusterSize = configurationFile.getInt("berryClusterSize", "Tweaks", 8, 0, 64, "Berry Bushes per chunk");
-        minersDelightEtFuturumCompat = configurationFile.getBoolean("minersDelightEtFuturumCompat", "Tweaks", true, "Allow Miner's Delight to grow on Et Futurum blocks (deepslate, granite, diorite, andesite, etc.)");
     }
 
     public void saveConfigurationFile() {

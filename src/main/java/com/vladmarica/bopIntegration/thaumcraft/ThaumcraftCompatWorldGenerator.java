@@ -1,5 +1,4 @@
 package com.vladmarica.bopIntegration.thaumcraft;
-
 import biomesoplenty.api.biome.BOPBiome;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;
 import cpw.mods.fml.common.IWorldGenerator;
@@ -11,7 +10,9 @@ import thaumcraft.common.lib.world.WorldGenSilverwoodTrees;
 
 import java.util.Random;
 
-import static net.minecraftforge.common.BiomeDictionary.Type.*;
+import static net.minecraftforge.common.BiomeDictionary.Type.FOREST;
+import static net.minecraftforge.common.BiomeDictionary.Type.MAGICAL;
+import static net.minecraftforge.common.BiomeDictionary.Type.PLAINS;
 
 public class ThaumcraftCompatWorldGenerator implements IWorldGenerator {
 
