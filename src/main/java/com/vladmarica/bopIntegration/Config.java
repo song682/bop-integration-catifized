@@ -25,13 +25,23 @@ public class Config {
     public boolean growableBopBerry;
     public boolean disableBopOriginalBerryBush;
     public int berryClusterSize;
+    // -------- 蜂蜜机制配置 --------
+    public boolean honeyEnabled;
+    public boolean honeyMeltEnabled;
+    public boolean honeyCrystallizeEnabled;
+    public boolean honeyCauldronEnabled;
+    public String[] hotBlocksList;
+    public int honeyMeltInterval;
+    public int crystallizeExposureTime;
+    public int crystallizeHotTime;
 
     public Config(File file) {
         configurationFile = new Configuration(file);
-        configurationFile.addCustomCategoryComment("Tweaks", "These options modify BOP itself. Some of these features are unavailable in the 1.7.10 version of BOP but existed in previous or later versions.");
+        configurationFile.addCustomCategoryComment("Tweaks", "These options modify BOP itself.");
         configurationFile.addCustomCategoryComment("Thaumcraft", "Options to make BOP work better with Thaumcraft");
         configurationFile.addCustomCategoryComment("HardCoreEnderExpansion", "Expand HEE's Feature with BOP");
         configurationFile.addCustomCategoryComment("IC2", "Options to make BOP work better with IC2");
+        configurationFile.addCustomCategoryComment("Honey", "Honey mechanics: melting, crystallization, and cauldron integration.");
 
         configurationFile.load();
         BopIntegrateOptions();
@@ -56,6 +66,15 @@ public class Config {
         growableBopBerry = configurationFile.getBoolean("growableBopBerry", "Tweaks", false, "Enable the berry bush planting and growing feature.");
         disableBopOriginalBerryBush = configurationFile.getBoolean("disableBopOriginalBerryBush", "Tweaks", false, "Disable the original Berry Bush of Biomes O' Plenty generate in the world");
         berryClusterSize = configurationFile.getInt("berryClusterSize", "Tweaks", 8, 0, 64, "Berry Bushes per chunk");
+        // -------- 蜂蜜机制选项 --------
+        honeyEnabled = configurationFile.getBoolean("honeyEnabled", "Honey", true, "Master switch for all honey mechanics.");
+        honeyMeltEnabled = configurationFile.getBoolean("honeyMeltEnabled", "Honey", true, "When enabled, Honey Blocks above hot blocks melt into Liquid Honey.");
+        honeyCrystallizeEnabled = configurationFile.getBoolean("honeyCrystallizeEnabled", "Honey", true, "When enabled, Liquid Honey exposed to air or on hot blocks will crystallize into Honey Blocks over time.");
+        honeyCauldronEnabled = configurationFile.getBoolean("honeyCauldronEnabled", "Honey", true, "When enabled, cauldrons on hot blocks can melt honey blocks and allow jar collection.");
+        hotBlocksList = configurationFile.getStringList("hotBlocksList", "Honey", new String[]{"minecraft:lava", "minecraft:flowing_lava", "minecraft:fire"}, "List of block registry names that count as hot blocks (e.g. minecraft:lava, minecraft:fire).");
+        honeyMeltInterval = configurationFile.getInt("honeyMeltInterval", "Honey", 20, 1, 200, "Ticks between honey block→liquid honey checks (20 ticks = 1 second).");
+        crystallizeExposureTime = configurationFile.getInt("crystallizeExposureTime", "Honey", 600, 20, 72000, "Ticks of air exposure before Liquid Honey crystallizes into a Honey Block (600 = 30 seconds).");
+        crystallizeHotTime = configurationFile.getInt("crystallizeHotTime", "Honey", 1200, 20, 72000, "Ticks on a hot block before Liquid Honey crystallizes into a Honey Block (1200 = 60 seconds).");
     }
 
     public void saveConfigurationFile() {

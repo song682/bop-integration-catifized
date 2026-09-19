@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "stage=0": { "model": "bopintegration:block/berry_bush_stage0" },
+    "stage=1": { "model": "bopintegration:block/berry_bush_stage1" },
+    "stage=2": { "model": "bopintegration:block/berry_bush_stage2" },
+    "stage=3": { "model": "bopintegration:block/berry_bush_stage3" }
+  }
+}

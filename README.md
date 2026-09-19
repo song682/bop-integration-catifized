@@ -1,6 +1,4 @@
-Biomes O' Plenty Integration—Catified
-<img align="right" alt="Logo" width="128" height="128" src="https://github.com/song682/bop-integration-catifized/blob/dev/src/main/resources/assets/bopintegration/BopIntegration128x.png?raw=true">
-====
+# Biomes O' Plenty Integration—Catified
 
 A Minecraft 1.7.10 mod for making Biomes O' Plenty work better with other mods, as well as adding some personal tweaks.  
 These interactions may be fixed in newer versions of Biomes O' Plenty, but not for 1.7.10.  
@@ -51,6 +49,7 @@ The entry that has a "(\*)" symbol means added by dfdvdsf, "(&)" means changed b
 
 [This website](https://www.pianshen.com/ask/513714028906/) helped me to fix the problem of removing recipes.  
 [vladmarica](https://github.com/vladmarica), who created the origianl mods.
+[ZapSplat](https://www.zapsplat.com/) for the sound effects.
 
 ---
 
