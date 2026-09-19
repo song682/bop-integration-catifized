@@ -23,9 +23,9 @@ Every change can be enabled or disabled in the config file.
     * Allow Silverwood trees to spawn all BOP biomes that are forests or plains.
     * Add Aspects to some BOP items that were missing them.
 * Industrialcraft 2
-    * The former Industrialcraft 2 integration module is removed between 1.0.1 to 1.0.6 for the reason that can't be compatible in the modern 1.7.10 mixins environment. After 1.1.0 the fuction of fixing the spawning behavior of Rubber Trees, no more hundreds of floating Rubber Trees in marsh biomes. (disabled by default(&))
+    * The former Industrialcraft 2 integration module is removed between 1.0.1 to 1.0.6 for the reason that can't be compatible in the modern 1.7.10 mixins environment. After 1.1.0 the fuction of fixing the spawning behavior of Rubber Trees, no more hundreds of floating Rubber Trees in marsh biomes. (disabled by default)
 * HardcoreEnder Expansion
-    * Replacing of Glowstone blocks in the Dungeon Tower with Celestial Crystals. (After 1.5.0| [#16](https://github.com/song682/bop-integration-catifized/issues/16))(\*)
+    * Replacing of Glowstone blocks in the Dungeon Tower with Celestial Crystals. (After 15.0| [#16](https://github.com/song682/bop-integration-catifized/issues/16))
 
 ---
 
@@ -47,9 +47,9 @@ Every change can be enabled or disabled in the config file.
 
 ## Credit
 
-[This website](https://www.pianshen.com/ask/513714028906/) helped me to fix the problem of removing recipes.  
-[vladmarica](https://github.com/vladmarica), who created the origianl mods.
-[ZapSplat](https://www.zapsplat.com/) for the sound effects.
+[This website](https://www.pianshen.com/ask/513714028906/) helped me to fix the problem of removing recipes.   
+[vladmarica](https://github.com/vladmarica), who created the origianl mods.    
+[ZapSplat](https://www.zapsplat.com/) for the sound effects.    
 
 ---
 

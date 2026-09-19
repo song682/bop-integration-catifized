@@ -91,9 +91,16 @@ dependencies {
         implementation "curse.maven:MysteriumLib-645051:3963822"
     }
 
-    implementation "maven.modrinth:notenoughitems-unofficial:${project.nei_version}-GTNH"
-    implementation "maven.modrinth:codechickencore-unofficial:${project.cc_version}"
-    implementation "maven.modrinth:codechickenlib-unofficial:${project.cc_version}"
+    runtimeOnly "maven.modrinth:notenoughitems-unofficial:${project.nei_version}-GTNH"
+    runtimeOnly "maven.modrinth:codechickencore-unofficial:${project.cc_version}"
+    runtimeOnly "maven.modrinth:codechickenlib-unofficial:${project.cc_version}"
+
+    implementation "maven.modrinth:biomes-o-plenty:2.1.0.2308"
+    compileOnly "curse.maven:ThuamCraft-223628:2227552"
+    compileOnly "curse.maven:IndustrialCraft-242638:6833054"
+    compileOnly "maven.modrinth:hardcore-ender-expansion:1.8.6"
+    compileOnly "maven.modrinth:baubles-expanded:2.2.1"
+    compileOnly "maven.modrinth:etfuturum:2.6.2"
 
     implementation fileTree(dir: 'lib', includes: ['*.jar'])
     implementation "com.github.song682:CatFrame:v0.9.0"

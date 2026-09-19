@@ -271,7 +271,11 @@ public class BOPIntegrationMod {
                 continue;
             }
 
-            BiomeFeatures features = ((BOPBiome) biome).theBiomeDecorator.bopFeatures;
+            // Reference BOPBiome's own decorator field by its shipped (SRG) name: the source name
+            // "theBiomeDecorator" collides with the vanilla BiomeGenBase field during BOP's
+            // reobfuscation, so writing "theBiomeDecorator" here would resolve to the inherited vanilla
+            // BiomeDecorator instead of BOP's BOPBiomeDecorator in the released BOP jar.
+            BiomeFeatures features = ((BOPBiome) biome).field_76760_I.bopFeatures;
             if (!(features instanceof OverworldBiomeFeatures)) {
                 continue;
             }
