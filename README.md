@@ -19,6 +19,7 @@ Every change can be enabled or disabled in the config file.
     * Modifiable Koru Rarity.
     * Ender Amethyst ore now IS spawned in the end and disappeared from the overworld. (Disabled by default, set by diffirent configuration options)
     * Bone meal can grow BOP foliage: whitelisted variants advance one stage (short grass grows taller, bushes grow their berries back). (Disabled by default.)
+    * Configurable BOP biome fog: disableBopFog removes it entirely (fog color and shortened render distance); minFogDistance keeps the view clear of fog within that many chunks (e.g. 5) by pushing the fog further out. (Disabled by default.)
 *   Thaumcraft
     * Allow Silverwood trees to spawn all BOP biomes that are forests or plains.
     * Add Aspects to some BOP items that were missing them.
