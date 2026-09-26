@@ -4,9 +4,5 @@
     "package": "com.vladmarica.bopIntegration.mixin",
     "compatibilityLevel": "JAVA_8",
     "refmap": "mixins.bopintegration.refmap.json",
-    "target": "@env(DEFAULT)",
-    "mixins": [
-        "ic2.WorldGenRubTreeMixin"
-    ],
-    "plugin": "com.vladmarica.bopIntegration.mixin.BOPIntegrationsLateMixinPlugin"
+    "target": "@env(DEFAULT)"
 }

@@ -1,5 +1,6 @@
 package com.vladmarica.bopIntegration.mixin;
 
+import com.gtnewhorizon.gtnhmixins.builders.IMixins;
 import org.spongepowered.asm.lib.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -26,9 +27,14 @@ public class BOPIntegrationsMixinPlugin implements IMixinConfigPlugin {
     @Override
     public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {}
 
+    /**
+     * Selects the regular mixins from {@link Mixins.NormalMixins} when this config is loaded:
+     * the GTNHMixins builder resolves the load-time state (physical side and {@code applyIf}
+     * conditions) and returns only the mixin classes valid for this run.
+     */
     @Override
     public List<String> getMixins() {
-        return null;
+        return IMixins.getMixins(Mixins.NormalMixins.class);
     }
 
     @Override

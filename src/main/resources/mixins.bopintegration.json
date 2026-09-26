@@ -5,15 +5,5 @@
     "compatibilityLevel": "JAVA_8",
     "refmap": "mixins.bopintegration.refmap.json",
     "target": "@env(DEFAULT)",
-    "mixins": [
-        "accessor.GameRegistryAccessor",
-        "accessor.CraftingManagerAccessor",
-        "accessor.EventBusAccessor",
-        "accessor.BiomeGenBaseAccessor",
-        "bop.WorldGenWaspHiveMixin",
-        "bop.WorldGenGraveMixin",
-        "bop.ChunkProviderBOPEndMixin",
-        "bop.BlockBOPFoliageMixin"
-    ],
     "plugin": "com.vladmarica.bopIntegration.mixin.BOPIntegrationsMixinPlugin"
 }
