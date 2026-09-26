@@ -1,4 +1,4 @@
-package com.vladmarica.bopIntegration.tweaks.world;
+package com.vladmarica.bopIntegration.content.world.gen;
 
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;

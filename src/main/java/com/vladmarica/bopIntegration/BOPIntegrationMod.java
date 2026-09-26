@@ -11,20 +11,21 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
 
-import static com.vladmarica.bopIntegration.Tags.MODID;
-
 @Mod(
-        modid = MODID,
+        modid = Tags.MODID,
         name = Tags.MODNAME,
         version = Tags.VERSION,
         dependencies = "required-after:BiomesOPlenty;required-after:catframe@[0.5.0,)",
         acceptedMinecraftVersions = "[1.7.10]")
 public class BOPIntegrationMod {
 
+    @Mod.Instance(Tags.MODID)
+
     /** Sided proxy holding the mod logic: {@link CommonProxy} on the server, ClientProxy on the client. */
     @SidedProxy(
             clientSide = "com.vladmarica.bopIntegration.proxy.ClientProxy",
-            serverSide = "com.vladmarica.bopIntegration.proxy.CommonProxy")
+            serverSide = "com.vladmarica.bopIntegration.proxy.CommonProxy"
+    )
     public static CommonProxy proxy;
 
     public static Config config;
@@ -37,7 +38,7 @@ public class BOPIntegrationMod {
      */
     public static Config ensureConfigLoaded() {
         if (config == null) {
-            config = new Config(new File(Loader.instance().getConfigDir(), MODID + ".cfg"));
+            config = new Config(new File(Loader.instance().getConfigDir(), Tags.MODID + ".cfg"));
         }
         return config;
     }

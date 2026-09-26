@@ -3,7 +3,7 @@ package com.vladmarica.bopIntegration.mixin.middle.bop;
 import biomesoplenty.api.content.BOPCBlocks;
 import biomesoplenty.common.world.ChunkProviderBOPEnd;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;
-import com.vladmarica.bopIntegration.tweaks.world.WorldGenCrystals;
+import com.vladmarica.bopIntegration.content.world.gen.WorldGenCrystals;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;

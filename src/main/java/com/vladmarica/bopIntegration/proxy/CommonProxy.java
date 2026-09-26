@@ -11,7 +11,7 @@ import com.vladmarica.bopIntegration.Config;
 import com.vladmarica.bopIntegration.thaumcraft.ThaumcraftModCompat;
 import com.vladmarica.bopIntegration.content.block.BlockHoneyCauldron;
 import com.vladmarica.bopIntegration.content.event.EventHoneyMechanics;
-import com.vladmarica.bopIntegration.tweaks.world.WorldGenNothing;
+import com.vladmarica.bopIntegration.content.world.gen.WorldGenNothing;
 import com.vladmarica.bopIntegration.mixin.middle.accessor.CraftingManagerAccessor;
 import com.vladmarica.bopIntegration.mixin.middle.accessor.EventBusAccessor;
 import com.vladmarica.bopIntegration.mixin.middle.accessor.GameRegistryAccessor;
@@ -33,6 +33,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.spongepowered.asm.launch.MixinBootstrap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,7 @@ public class CommonProxy {
     public static EventHoneyMechanics honeyHandler;
 
     public void preInit(FMLPreInitializationEvent event) {
+        MixinBootstrap.init();
         if (BOPIntegrationMod.config == null) {
             BOPIntegrationMod.config = new Config(event.getSuggestedConfigurationFile());
         }

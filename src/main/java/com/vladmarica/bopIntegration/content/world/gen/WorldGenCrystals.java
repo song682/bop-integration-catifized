@@ -1,4 +1,4 @@
-package com.vladmarica.bopIntegration.tweaks.world;
+package com.vladmarica.bopIntegration.content.world.gen;
 
 import biomesoplenty.api.content.BOPCBlocks;
 import net.minecraft.block.Block;
