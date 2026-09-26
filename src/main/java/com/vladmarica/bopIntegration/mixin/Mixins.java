@@ -50,7 +50,12 @@ public class Mixins {
         /** Reduced IC2 rubber tree generation in BOP grassland and marsh biomes. */
         IC2_RUBBER_TREES(new MixinBuilder().setPhase(Phase.LATE)
                 .addCommonMixins("ic2.WorldGenRubTreeMixin")
-                .addRequiredMod(new TargetModBuilder().setModId("IC2")));
+                .addRequiredMod(new TargetModBuilder().setModId("IC2"))),
+
+        /** Replaces the glowstone blocks of HEE's Dungeon Tower with BOP celestial crystals. */
+        HEE_TOWER_GLOWSTONE(new MixinBuilder().setPhase(Phase.LATE)
+                .addCommonMixins("hee.MixinComponetTower")
+                .addRequiredMod(new TargetModBuilder().setModId("HardcoreEnderExpansion")));
 
         private final MixinBuilder builder;
 
