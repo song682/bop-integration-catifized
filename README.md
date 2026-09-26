@@ -29,7 +29,6 @@ Every change can be enabled or disabled in the config file.
 
 ---
 
-
 ## **Requirements**
 
 * [Biomes O' Plenty for 1.7.10](https://www.curseforge.com/minecraft/mc-mods/biomes-o-plenty)
