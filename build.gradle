@@ -259,3 +259,18 @@ artifacts {
     archives deobfJar
     archives sourcesJar
 }
+
+if (project.include_license.toBoolean()){
+    jar {
+        from file("./LICENSE")
+        from file("./LICENSE-OF-MC_Mod-REDISTRIBUTION")
+    }
+    deobfJar {
+        from file("./LICENSE")
+        from file("./LICENSE-OF-MC_Mod-REDISTRIBUTION")
+    }
+    sourcesJar {
+        from file("./LICENSE")
+        from file("./LICENSE-OF-MC_Mod-REDISTRIBUTION")
+    }
+}
