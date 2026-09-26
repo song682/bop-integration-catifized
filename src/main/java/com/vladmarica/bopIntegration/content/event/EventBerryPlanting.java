@@ -1,8 +1,8 @@
 package com.vladmarica.bopIntegration.content.event;
 
 import biomesoplenty.api.content.BOPCItems;
-import com.vladmarica.bopIntegration.BOPIntegrationMod;
 import com.vladmarica.bopIntegration.content.block.BlockBOPBerryBush;
+import com.vladmarica.bopIntegration.proxy.CommonProxy;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -54,7 +54,7 @@ public class EventBerryPlanting {
         Item bopBerry = BOPCItems.food;
         if (bopBerry == null) return;
 
-        Item bushItem = Item.getItemFromBlock(BOPIntegrationMod.bopBerryBush);
+        Item bushItem = Item.getItemFromBlock(CommonProxy.bopBerryBush);
         if (held.getItem() == bushItem) return;
         if (held.getItem() != bopBerry) return;
         if (held.getItemDamage() != 0) return;
@@ -80,7 +80,7 @@ public class EventBerryPlanting {
         else if (!world.isAirBlock(x, y + 1, z))
             return;
 
-        BlockBOPBerryBush bush = (BlockBOPBerryBush) BOPIntegrationMod.bopBerryBush;
+        BlockBOPBerryBush bush = (BlockBOPBerryBush) CommonProxy.bopBerryBush;
 
         if (world.setBlock(x, y + 1, z, bush, 0, 3)) {
             // 强制初始化 meta=0

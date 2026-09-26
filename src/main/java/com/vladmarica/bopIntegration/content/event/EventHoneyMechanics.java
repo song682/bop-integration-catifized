@@ -5,6 +5,7 @@ import biomesoplenty.api.content.BOPCItems;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;
 import com.vladmarica.bopIntegration.Config;
 import com.vladmarica.bopIntegration.content.block.BlockHoneyCauldron;
+import com.vladmarica.bopIntegration.proxy.CommonProxy;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.block.Block;
@@ -336,7 +337,7 @@ public class EventHoneyMechanics {
         Block block = world.getBlock(x, y, z);
         // 必须是蜂蜜炼药锅才有蜂蜜
         if (!(block instanceof BlockHoneyCauldron)) {
-            BOPIntegrationMod.logger.debug("Cauldron at ({},{},{}) has no honey", x, y, z);
+            CommonProxy.logger.debug("Cauldron at ({},{},{}) has no honey", x, y, z);
             return;
         }
 
@@ -363,13 +364,13 @@ public class EventHoneyMechanics {
             world.setBlockMetadataWithNotify(x, y, z, honeyLevel, 3);
         }
 
-        BOPIntegrationMod.logger.debug("Collected honey jar from cauldron, remaining level: {}", honeyLevel);
+        CommonProxy.logger.debug("Collected honey jar from cauldron, remaining level: {}", honeyLevel);
     }
 
     /** 将蜂蜜块放入炼药锅融化 */
     private void handleMeltHoneyInCauldron(World world, int x, int y, int z, EntityPlayer player, ItemStack honeyBlockStack) {
         Block block = world.getBlock(x, y, z);
-        BlockHoneyCauldron honeyCauldron = BOPIntegrationMod.honeyCauldronBlock;
+        BlockHoneyCauldron honeyCauldron = CommonProxy.honeyCauldronBlock;
 
         // 消耗一个蜂蜜块
         if (!player.capabilities.isCreativeMode) {
@@ -389,7 +390,7 @@ public class EventHoneyMechanics {
         int newLevel = Math.min(3, currentLevel + 1);
         world.setBlockMetadataWithNotify(x, y, z, newLevel, 3);
 
-        BOPIntegrationMod.logger.debug("Melted honey block in cauldron at ({},{},{}), level: {}", x, y, z, newLevel);
+        CommonProxy.logger.debug("Melted honey block in cauldron at ({},{},{}), level: {}", x, y, z, newLevel);
     }
 
     // ==================== 内部类：BlockPos ====================

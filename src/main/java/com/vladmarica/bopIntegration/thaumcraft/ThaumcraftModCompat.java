@@ -3,6 +3,7 @@ package com.vladmarica.bopIntegration.thaumcraft;
 import biomesoplenty.api.content.BOPCBlocks;
 import biomesoplenty.api.content.BOPCItems;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;
+import com.vladmarica.bopIntegration.proxy.CommonProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApi;
@@ -16,7 +17,7 @@ public final class ThaumcraftModCompat {
         if (BOPIntegrationMod.config.addMissingAspects) {
             addMissingAspects();
         }
-        BOPIntegrationMod.logger.info("Thaumcraft Biomes O' Plenty integration patch has been applied");
+        CommonProxy.logger.info("Thaumcraft Biomes O' Plenty integration patch has been applied");
     }
 
     private static void addMissingAspects() {
