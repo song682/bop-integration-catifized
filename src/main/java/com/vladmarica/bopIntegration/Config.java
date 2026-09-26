@@ -25,6 +25,9 @@ public class Config {
     public boolean growableBopBerry;
     public boolean disableBopOriginalBerryBush;
     public int berryClusterSize;
+    // -------- BOP fog options --------
+    public boolean disableBopFog;
+    public int minFogDistance;
     // -------- 蜂蜜机制配置 --------
     public boolean honeyEnabled;
     public boolean honeyMeltEnabled;
@@ -66,6 +69,9 @@ public class Config {
         growableBopBerry = configurationFile.getBoolean("growableBopBerry", "Tweaks", false, "Enable the berry bush planting and growing feature.");
         disableBopOriginalBerryBush = configurationFile.getBoolean("disableBopOriginalBerryBush", "Tweaks", false, "Disable the original Berry Bush of Biomes O' Plenty generate in the world");
         berryClusterSize = configurationFile.getInt("berryClusterSize", "Tweaks", 8, 0, 64, "Berry Bushes per chunk");
+        // -------- BOP fog options --------
+        disableBopFog = configurationFile.getBoolean("disableBopFog", "Tweaks", false, "Disable BOP's biome fog entirely: removes both the biome fog color and the shortened fog render distance in every BOP biome (Desert, Ominous Woods, Wasteland, etc.), restoring vanilla fog.");
+        minFogDistance = configurationFile.getInt("minFogDistance", "Tweaks", 0, 0, 32, "Minimum distance in chunks at which BOP biome fog may begin. 0 = untouched BOP behavior. For example, 5 keeps the view free of BOP fog within 5 chunks (80 blocks) by pushing the fog range further out. Ignored when disableBopFog is true.");
         // -------- 蜂蜜机制选项 --------
         honeyEnabled = configurationFile.getBoolean("honeyEnabled", "Honey", true, "Master switch for all honey mechanics.");
         honeyMeltEnabled = configurationFile.getBoolean("honeyMeltEnabled", "Honey", true, "When enabled, Honey Blocks above hot blocks melt into Liquid Honey.");

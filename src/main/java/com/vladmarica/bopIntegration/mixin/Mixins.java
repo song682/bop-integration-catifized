@@ -32,7 +32,10 @@ public class Mixins {
                 "bop.ChunkProviderBOPEndMixin"),
 
         /** Koru (meta 12) turnip seed drop behavior of BlockBOPFoliage. */
-        BOP_FOLIAGE(Side.COMMON, "bop.BlockBOPFoliageMixin");
+        BOP_FOLIAGE(Side.COMMON, "bop.BlockBOPFoliageMixin"),
+
+        /** Client-side BOP biome fog (FogHandler): global disable and minimum fog distance. */
+        BOP_FOG(Side.CLIENT, "bop.FogHandlerMixin");
 
         private final MixinBuilder builder;
 
