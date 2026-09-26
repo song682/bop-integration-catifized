@@ -6,7 +6,6 @@ import biomesoplenty.api.content.BOPCBlocks;
 import biomesoplenty.api.content.BOPCItems;
 import biomesoplenty.common.biome.decoration.OverworldBiomeFeatures;
 import biomesoplenty.common.world.generation.WorldGenFieldAssociation;
-import com.vladmarica.bopIntegration.hee.TowerGlowstoneReplacer;
 import com.vladmarica.bopIntegration.thaumcraft.ThaumcraftModCompat;
 import com.vladmarica.bopIntegration.content.block.BlockBOPBerryBush;
 import com.vladmarica.bopIntegration.content.event.EventBerryPlanting;
@@ -168,20 +167,16 @@ public class BOPIntegrationMod {
             }
         }
 
-        // 新增 HardcoreEnderExpansion 兼容性
-        if(config.replaceGlowStoneInTower) {
+        // HEE Dungeon Tower glowstone replacement (handled via Mixin into ComponentTower.setupStructure)
+        if (config.replaceGlowStoneInTower) {
             if (Loader.isModLoaded("HardcoreEnderExpansion")) {
-                // 注册自定义的世界生成器
-                MinecraftForge.TERRAIN_GEN_BUS.register(new TowerGlowstoneReplacer());
-                logger.info("Found HEE in mod list, the config replaceGlowStoneInTower is enabled, applying it into the game instance");
+                logger.info("HEE glowstone replacement in the Dungeon Tower applied via Mixin");
             } else {
-                logger.info("HEE Not Found in mod list, though the config replaceGlowStoneInTower is enabled, skipping it.");
+                logger.info("HEE not found - skipping Dungeon Tower glowstone replacement");
             }
         } else {
-            if(Loader.isModLoaded("HardcoreEnderExpansion")){
-                logger.info("Found HEE in mod list, while the config replaceGlowStoneInTower is enabled, skipping it.");
-            } else {
-                logger.info("Neither HEE is installed, nor the co nfig enabled, will do nothing.");
+            if (Loader.isModLoaded("HardcoreEnderExpansion")) {
+                logger.info("HEE is installed, but replaceGlowStoneInTower is disabled.");
             }
         }
     }
