@@ -38,6 +38,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -60,9 +61,24 @@ public class BOPIntegrationMod {
     public static BlockHoneyCauldron honeyCauldronBlock;
     public static EventHoneyMechanics honeyHandler;
 
+    /**
+     * Returns the configuration, loading it on first use. Late mixin loaders evaluate their
+     * {@code setApplyIf} conditions during {@code LoaderState.CONSTRUCTING} -- before
+     * {@link #preInit} runs -- so they read config values through this early path. Safe to call
+     * repeatedly; the same instance is reused afterwards.
+     */
+    public static Config ensureConfigLoaded() {
+        if (config == null) {
+            config = new Config(new File(Loader.instance().getConfigDir(), MODID + ".cfg"));
+        }
+        return config;
+    }
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        config = new Config(event.getSuggestedConfigurationFile());
+        if (config == null) {
+            config = new Config(event.getSuggestedConfigurationFile());
+        }
 
         // 注册自身到事件总线
         MinecraftForge.EVENT_BUS.register(this);

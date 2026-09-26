@@ -3,6 +3,7 @@ package com.vladmarica.bopIntegration.mixin;
 import com.gtnewhorizon.gtnhmixins.builders.IMixins;
 import com.gtnewhorizon.gtnhmixins.builders.MixinBuilder;
 import com.gtnewhorizon.gtnhmixins.builders.TargetModBuilder;
+import com.vladmarica.bopIntegration.BOPIntegrationMod;
 
 /**
  * Declarative registry of every mixin shipped by the mod.
@@ -50,12 +51,16 @@ public class Mixins {
         /** Reduced IC2 rubber tree generation in BOP grassland and marsh biomes. */
         IC2_RUBBER_TREES(new MixinBuilder().setPhase(Phase.LATE)
                 .addCommonMixins("ic2.WorldGenRubTreeMixin")
-                .addRequiredMod(new TargetModBuilder().setModId("IC2"))),
+                .addRequiredMod(new TargetModBuilder().setModId("IC2"))
+                .setApplyIf(() -> BOPIntegrationMod.ensureConfigLoaded().fixIC2RubberTrees)
+        ),
 
         /** Replaces the glowstone blocks of HEE's Dungeon Tower with BOP celestial crystals. */
         HEE_TOWER_GLOWSTONE(new MixinBuilder().setPhase(Phase.LATE)
                 .addCommonMixins("hee.MixinComponetTower")
-                .addRequiredMod(new TargetModBuilder().setModId("HardcoreEnderExpansion")));
+                .addRequiredMod(new TargetModBuilder().setModId("HardcoreEnderExpansion"))
+                .setApplyIf(() -> BOPIntegrationMod.ensureConfigLoaded().replaceGlowStoneInTower)
+        );
 
         private final MixinBuilder builder;
 
