@@ -1,4 +1,4 @@
-package com.vladmarica.bopIntegration.mixin.accessor;
+package com.vladmarica.bopIntegration.mixin.middle.accessor;
 
 import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.biome.BiomeGenBase;

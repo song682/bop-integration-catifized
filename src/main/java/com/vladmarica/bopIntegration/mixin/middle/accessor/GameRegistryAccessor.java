@@ -1,4 +1,4 @@
-package com.vladmarica.bopIntegration.mixin.accessor;
+package com.vladmarica.bopIntegration.mixin.middle.accessor;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.registry.GameRegistry;

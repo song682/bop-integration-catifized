@@ -1,4 +1,4 @@
-# Biomes O' Plenty Integration—Catified
+# Biomes O' Plenty Integration — Catified
 
 A Minecraft 1.7.10 mod for making Biomes O' Plenty work better with other mods, as well as adding some personal tweaks.  
 These interactions may be fixed in newer versions of Biomes O' Plenty, but not for 1.7.10.  
@@ -56,3 +56,4 @@ Every change can be enabled or disabled in the config file.
 ## Licence
 Code - [MIT Licence](LICENSE)   
 Berry Bush Textures - Copyright © 2025 dfdvdsf. All rights reserved.  
+Binary Jars - [Redistribute License](LICENSE-OF-MC_Mod-REDISTRIBUTION)

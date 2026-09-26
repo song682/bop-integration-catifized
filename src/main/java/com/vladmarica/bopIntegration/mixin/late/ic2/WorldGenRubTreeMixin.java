@@ -1,4 +1,4 @@
-package com.vladmarica.bopIntegration.mixin.ic2;
+package com.vladmarica.bopIntegration.mixin.late.ic2;
 
 import biomesoplenty.api.content.BOPCBiomes;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;

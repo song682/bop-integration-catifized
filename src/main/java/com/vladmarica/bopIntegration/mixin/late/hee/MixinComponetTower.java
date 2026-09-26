@@ -1,4 +1,4 @@
-package com.vladmarica.bopIntegration.mixin.hee;
+package com.vladmarica.bopIntegration.mixin.late.hee;
 
 import biomesoplenty.api.content.BOPCBlocks;
 import chylex.hee.world.structure.tower.ComponentTower;

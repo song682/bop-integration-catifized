@@ -1,7 +1,7 @@
 {
     "required": true,
     "minVersion": "0.8.5",
-    "package": "com.vladmarica.bopIntegration.mixin",
+    "package": "com.vladmarica.bopIntegration.mixin.middle",
     "compatibilityLevel": "JAVA_8",
     "refmap": "mixins.bopintegration.refmap.json",
     "target": "@env(DEFAULT)",
