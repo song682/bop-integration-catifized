@@ -54,6 +54,6 @@ Every change can be enabled or disabled in the config file.
 ---
 
 ## Licence
-Code - [MIT Licence](LICENSE)   
-Berry Bush Textures - Copyright © 2025 dfdvdsf. All rights reserved.  
-Binary Jars - [Redistribute License](LICENSE-OF-MC_Mod-REDISTRIBUTION)
+- Code - [MIT Licence](LICENSE)
+- Berry Bush Textures - Copyright © 2025 dfdvdsf. All rights reserved.
+- Binary Jars - [Redistribute License](LICENSE-OF-MC_Mod-REDISTRIBUTION)
