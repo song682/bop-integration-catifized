@@ -9,11 +9,8 @@ import biomesoplenty.common.world.generation.WorldGenFieldAssociation;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;
 import com.vladmarica.bopIntegration.Config;
 import com.vladmarica.bopIntegration.thaumcraft.ThaumcraftModCompat;
-import com.vladmarica.bopIntegration.content.block.BlockBOPBerryBush;
-import com.vladmarica.bopIntegration.content.event.EventBerryPlanting;
 import com.vladmarica.bopIntegration.content.block.BlockHoneyCauldron;
 import com.vladmarica.bopIntegration.content.event.EventHoneyMechanics;
-import com.vladmarica.bopIntegration.content.world.gen.WorldGenBerryBush;
 import com.vladmarica.bopIntegration.tweaks.world.WorldGenNothing;
 import com.vladmarica.bopIntegration.mixin.middle.accessor.CraftingManagerAccessor;
 import com.vladmarica.bopIntegration.mixin.middle.accessor.EventBusAccessor;
@@ -27,7 +24,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.EventBus;
 import cpw.mods.fml.common.eventhandler.IEventListener;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -49,7 +45,6 @@ import static com.vladmarica.bopIntegration.Tags.MODID;
 public class CommonProxy {
 
     public static final Logger logger = LogManager.getLogger(MODID);
-    public static Block bopBerryBush;
     public static BlockHoneyCauldron honeyCauldronBlock;
     public static EventHoneyMechanics honeyHandler;
 
@@ -60,12 +55,6 @@ public class CommonProxy {
 
         // 注册自身到事件总线
         MinecraftForge.EVENT_BUS.register(this);
-
-        if(BOPIntegrationMod.config.growableBopBerry) {
-            EventBerryPlanting.register();
-            bopBerryBush = new BlockBOPBerryBush();
-            GameRegistry.registerBlock(bopBerryBush, "berry_bush");
-        }
 
         // -------- 蜂蜜炼药锅注册 --------
         if (BOPIntegrationMod.config.honeyEnabled && BOPIntegrationMod.config.honeyCauldronEnabled) {
@@ -88,10 +77,6 @@ public class CommonProxy {
 
         if (BOPIntegrationMod.config.disableBopOriginalBerryBush) {
             WorldGenFieldAssociation.associateFeature("berryBushesPerChunk", new WorldGenNothing());
-        }
-
-        if(BOPIntegrationMod.config.growableBopBerry){
-            WorldGenFieldAssociation.associateFeature("berryBushesPerChunk", new WorldGenBerryBush(bopBerryBush, 0));
         }
 
         // -------- Koru rarity multiplier --------

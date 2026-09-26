@@ -18,7 +18,7 @@ Every change can be enabled or disabled in the config file.
     * Added an option to lower the spawn rate of nether wasp hives.
     * Modifiable Koru Rarity.
     * Ender Amethyst ore now IS spawned in the end and disappeared from the overworld. (Disabled by default, set by diffirent configuration options)
-    * The berry should be regrowable and plantable.
+    * Bone meal can grow BOP foliage: whitelisted variants advance one stage (short grass grows taller, bushes grow their berries back). (Disabled by default.)
 *   Thaumcraft
     * Allow Silverwood trees to spawn all BOP biomes that are forests or plains.
     * Add Aspects to some BOP items that were missing them.
@@ -28,6 +28,7 @@ Every change can be enabled or disabled in the config file.
     * Replacing of Glowstone blocks in the Dungeon Tower with Celestial Crystals. (After 15.0| [#16](https://github.com/song682/bop-integration-catifized/issues/16))
 
 ---
+
 
 ## **Requirements**
 
@@ -54,5 +55,4 @@ Every change can be enabled or disabled in the config file.
 
 ## Licence
 - Code - [MIT Licence](LICENSE)
-- Berry Bush Textures - Copyright © 2025 dfdvdsf. All rights reserved.
 - Binary Jars - [Redistribute License](LICENSE-OF-MC_Mod-REDISTRIBUTION)

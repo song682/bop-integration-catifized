@@ -1,6 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "bopintegration:blocks/berry_bush_stage3"
-  }
-}

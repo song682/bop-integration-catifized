@@ -63,6 +63,13 @@ public class Mixins {
                 .addCommonMixins("hee.MixinComponetTower")
                 .addRequiredMod(new TargetModBuilder().setModId("HardcoreEnderExpansion"))
                 .setApplyIf(() -> BOPIntegrationMod.ensureConfigLoaded().replaceGlowStoneInTower)
+        ),
+
+        /** Bone meal growth for whitelisted BlockBOPFoliage variants, duck-typed into IGrowable. */
+        BOP_FOLIAGE_GROWTH(new MixinBuilder().setPhase(Phase.LATE)
+                .addCommonMixins("bop.BlockBOPFoliageGrowthMixin")
+                .addRequiredMod(new TargetModBuilder().setModId("BiomesOPlenty"))
+                .setApplyIf(() -> BOPIntegrationMod.ensureConfigLoaded().growableBopFoliage.length > 0)
         );
 
         private final MixinBuilder builder;
