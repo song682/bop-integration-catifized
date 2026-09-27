@@ -1,10 +1,17 @@
 package com.vladmarica.bopIntegration;
 
 import net.minecraftforge.common.config.Configuration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Config {
+
+    private static final Logger LOGGER = LogManager.getLogger(Tags.MODID);
 
     private Configuration configurationFile;
 
@@ -65,7 +72,7 @@ public class Config {
         amethystEndGen = configurationFile.getBoolean("amethystEndGen", "Tweaks", false, "The Ender Amethyst ore is able to generate in the end now.");
         genAmethystOreOverworld = configurationFile.getBoolean("genAmethystOreOverworld", "Tweaks", true, "Set false to disable it generated in the overworld");
         replaceGlowStoneInTower = configurationFile.getBoolean("replaceGlowStoneInTower", "HardcoreEnderExpansion", false,"Replace the Glow Stone as Celestial Crystals ");
-        growableBopFoliage = configurationFile.get("Tweaks", "growableBopFoliage", new int[] {}, "BlockBOPFoliage metadata values that bone meal can grow. Only variants with a built-in next stage grow: 1 (shortgrass) -> 2 (mediumgrass) and 4 (bush) -> 8 (berrybush, berries regrow). Example: <4> lets bushes regrow their berries. An empty list disables the feature, and changes require a game restart.").getIntList();
+        growableBopFoliage = parseGrowableFoliage(configurationFile.getStringList("growableBopFoliage", "Tweaks", new String[] {}, "BlockBOPFoliage metadata values that bone meal can grow. Only variants with a built-in next stage grow: 1 (shortgrass) -> 2 (mediumgrass) and 4 (bush) -> 8 (berrybush, berries regrow). Put each value on its own line inside the < > block; '1, 4' on a single line also works. An empty list disables the feature, and changes require a game restart."));
         disableBopOriginalBerryBush = configurationFile.getBoolean("disableBopOriginalBerryBush", "Tweaks", false, "Disable the original Berry Bush of Biomes O' Plenty generate in the world");
         // -------- BOP fog options --------
         disableBopFog = configurationFile.getBoolean("disableBopFog", "Tweaks", false, "Disable BOP's biome fog entirely: removes both the biome fog color and the shortened fog render distance in every BOP biome (Desert, Ominous Woods, Wasteland, etc.), restoring vanilla fog.");
@@ -83,6 +90,39 @@ public class Config {
 
     public void saveConfigurationFile() {
         configurationFile.save();
+    }
+
+    /**
+     * Parses the raw config entries into the growable whitelist.
+     * <p>
+     * Forge stores one list entry per line and silently resets an int-typed list to its default as
+     * soon as a single entry fails to parse, which wipes hand-edited files on the next save. Reading
+     * the raw string list keeps user input intact; comma-separated entries on a single line are
+     * accepted as well, and invalid entries are only logged and skipped.
+     */
+    private static int[] parseGrowableFoliage(String[] rawValues) {
+        List<Integer> parsedValues = new ArrayList<Integer>();
+        for (String rawValue : rawValues) {
+            for (String part : rawValue.split(",")) {
+                String trimmedPart = part.trim();
+                if (trimmedPart.isEmpty()) {
+                    continue;
+                }
+                try {
+                    parsedValues.add(Integer.parseInt(trimmedPart));
+                } catch (NumberFormatException exception) {
+                    LOGGER.warn("Ignoring invalid growableBopFoliage entry: '{}'", trimmedPart);
+                }
+            }
+        }
+
+        int[] values = new int[parsedValues.size()];
+        for (int i = 0; i < parsedValues.size(); i++) {
+            values[i] = parsedValues.get(i);
+        }
+
+        LOGGER.info("growableBopFoliage whitelist: {}", Arrays.toString(values));
+        return values;
     }
 
     public boolean hasChanged() {
