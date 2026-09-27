@@ -19,8 +19,6 @@ import java.io.File;
         acceptedMinecraftVersions = "[1.7.10]")
 public class BOPIntegrationMod {
 
-    @Mod.Instance(Tags.MODID)
-
     /** Sided proxy holding the mod logic: {@link CommonProxy} on the server, ClientProxy on the client. */
     @SidedProxy(
             clientSide = "com.vladmarica.bopIntegration.proxy.ClientProxy",
