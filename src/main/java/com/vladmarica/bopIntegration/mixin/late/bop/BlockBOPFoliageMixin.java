@@ -1,4 +1,4 @@
-package com.vladmarica.bopIntegration.mixin.middle.bop;
+package com.vladmarica.bopIntegration.mixin.late.bop;
 
 import biomesoplenty.api.content.BOPCItems;
 import biomesoplenty.common.blocks.BlockBOPFoliage;

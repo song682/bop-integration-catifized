@@ -1,7 +1,7 @@
-package com.vladmarica.bopIntegration.mixin.middle.bop;
+package com.vladmarica.bopIntegration.mixin.late.bop;
 
 import biomesoplenty.api.biome.BOPBiome;
-import biomesoplenty.common.world.features.nether.WorldGenGrave;
+import biomesoplenty.common.world.features.nether.WorldGenWaspHive;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,13 +11,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Random;
 
-@Mixin(WorldGenGrave.class)
-public class WorldGenGraveMixin {
+@Mixin(WorldGenWaspHive.class)
+public class WorldGenWaspHiveMixin {
 
     @SuppressWarnings("rawtypes")
     @Inject(method = "setupGeneration", at = @At("HEAD"), cancellable = true, remap = false)
-    private void cancelIfDisabled(World world, Random random, BOPBiome biome, String featureName, int x, int z, CallbackInfo ci) {
-        if (BOPIntegrationMod.config.removeNetherGravestones) {
+    private void applyRarityCheck(World world, Random random, BOPBiome biome, String featureName, int x, int z, CallbackInfo ci) {
+        float rarity = BOPIntegrationMod.config.waspHiveRarityModifier;
+        if (rarity > 0 && random.nextFloat() > rarity) {
             ci.cancel();
         }
     }

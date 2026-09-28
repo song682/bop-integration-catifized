@@ -1,4 +1,4 @@
-package com.vladmarica.bopIntegration.mixin.middle.bop;
+package com.vladmarica.bopIntegration.mixin.late.bop;
 
 import biomesoplenty.client.fog.FogHandler;
 import com.vladmarica.bopIntegration.BOPIntegrationMod;

@@ -23,7 +23,6 @@ public class Config {
     public boolean genAmethystOreOverworld;
     public boolean replaceGlowStoneInTower;
     public int[] growableBopFoliage;
-    public boolean disableBopOriginalBerryBush;
     // -------- BOP fog options --------
     public boolean disableBopFog;
     public int minFogDistance;
@@ -66,7 +65,6 @@ public class Config {
         genAmethystOreOverworld = configurationFile.getBoolean("genAmethystOreOverworld", "Tweaks", true, "Set false to disable it generated in the overworld");
         replaceGlowStoneInTower = configurationFile.getBoolean("replaceGlowStoneInTower", "HardcoreEnderExpansion", false,"Replace the Glow Stone as Celestial Crystals ");
         growableBopFoliage = configurationFile.get("Tweaks", "growableBopFoliage", new int[] {}, "BlockBOPFoliage metadata values that bone meal can grow. Only variants with a built-in next stage grow: 1 (shortgrass) -> 2 (mediumgrass) and 4 (bush) -> 8 (berrybush, berries regrow). Example: <4> lets bushes regrow their berries. An empty list disables the feature, and changes require a game restart.").getIntList();
-        disableBopOriginalBerryBush = configurationFile.getBoolean("disableBopOriginalBerryBush", "Tweaks", false, "Disable the original Berry Bush of Biomes O' Plenty generate in the world");
         // -------- BOP fog options --------
         disableBopFog = configurationFile.getBoolean("disableBopFog", "Tweaks", false, "Disable BOP's biome fog entirely: removes both the biome fog color and the shortened fog render distance in every BOP biome (Desert, Ominous Woods, Wasteland, etc.), restoring vanilla fog.");
         minFogDistance = configurationFile.getInt("minFogDistance", "Tweaks", 0, 0, 32, "Minimum distance in chunks at which BOP biome fog may begin. 0 = untouched BOP behavior. For example, 5 keeps the view free of BOP fog within 5 chunks (80 blocks) by pushing the fog range further out. Ignored when disableBopFog is true.");

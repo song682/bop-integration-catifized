@@ -23,19 +23,7 @@ public class Mixins {
                 "accessor.GameRegistryAccessor",
                 "accessor.CraftingManagerAccessor",
                 "accessor.EventBusAccessor",
-                "accessor.BiomeGenBaseAccessor"),
-
-        /** BOP world generation tweaks: nether gravestone and wasp hive conditions, plus end chunk population. */
-        BOP_WORLDGEN(Side.COMMON,
-                "bop.WorldGenWaspHiveMixin",
-                "bop.WorldGenGraveMixin",
-                "bop.ChunkProviderBOPEndMixin"),
-
-        /** Koru (meta 12) turnip seed drop behavior of BlockBOPFoliage. */
-        BOP_FOLIAGE(Side.COMMON, "bop.BlockBOPFoliageMixin"),
-
-        /** Client-side BOP biome fog (FogHandler): global disable and minimum fog distance. */
-        BOP_FOG(Side.CLIENT, "bop.FogHandlerMixin");
+                "accessor.BiomeGenBaseAccessor");
 
         private final MixinBuilder builder;
 
@@ -63,6 +51,19 @@ public class Mixins {
                 .addCommonMixins("hee.MixinComponetTower")
                 .addRequiredMod(new TargetModBuilder().setModId("HardcoreEnderExpansion"))
                 .setApplyIf(() -> BOPIntegrationMod.ensureConfigLoaded().replaceGlowStoneInTower)
+        ),
+        /** BOP world generation tweaks: nether gravestone and wasp hive conditions, plus end chunk population. */
+        BOP_WORLDGEN(new MixinBuilder().setPhase(Phase.LATE)
+                .addCommonMixins(
+                        "bop.WorldGenWaspHiveMixin",
+                        "bop.WorldGenGraveMixin",
+                        "bop.ChunkProviderBOPEndMixin")
+        ),
+
+        /** Client-side BOP biome fog (FogHandler): global disable and minimum fog distance. */
+        BOP_FOG(new MixinBuilder().setPhase(Phase.LATE)
+                .addClientMixins("bop.FogHandlerMixin")
+                .setApplyIf(() -> BOPIntegrationMod.ensureConfigLoaded().disableBopFog)
         ),
 
         /** Bone meal growth for whitelisted BlockBOPFoliage variants, duck-typed into IGrowable. */

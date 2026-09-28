@@ -77,10 +77,6 @@ public class CommonProxy {
                 BOPIntegrationMod.config.honeyMeltEnabled, BOPIntegrationMod.config.honeyCrystallizeEnabled, BOPIntegrationMod.config.honeyCauldronEnabled);
         }
 
-        if (BOPIntegrationMod.config.disableBopOriginalBerryBush) {
-            WorldGenFieldAssociation.associateFeature("berryBushesPerChunk", new WorldGenNothing());
-        }
-
         // -------- Koru rarity multiplier --------
         applyKoruFrequencyMultiplier();
 

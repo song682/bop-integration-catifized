@@ -5,5 +5,8 @@
     "compatibilityLevel": "JAVA_8",
     "refmap": "mixins.bopintegration.refmap.json",
     "target": "@env(DEFAULT)",
-    "plugin": "com.vladmarica.bopIntegration.mixin.BOPIntegrationsMixinPlugin"
+    "plugin": "com.vladmarica.bopIntegration.mixin.BOPIntegrationsMixinPlugin",
+    "injectors": {
+        "defaultRequire": 1
+    }
 }
